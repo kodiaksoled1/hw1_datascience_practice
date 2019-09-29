@@ -1,0 +1,174 @@
+---
+title: "hw_2_practice"
+author: "Kodiak Soled"
+date: "9/28/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Homework Problem #1
+
+##Mr. Trash Wheel
+
+###First, we will need to load the tidyverse package for some of the datacleaning we will perform:
+```{r message = FALSE}
+library(tidyverse)
+```
+
+###Then we can import the Excel file data, specify the sheets in the Excel file we want with the `sheets` function, omit non-data entries by specifying the columns we want to include with the `range` function. We also clean up the names of the variables with the `janitor` function. Next, we can omit the rows that do not include dumpster-specific data by using the `drop_na` function. Lastly, we will round the number of sports balls to the nearest integer and converts the result to an integer variable. 
+```{r}
+library(readxl)
+mr_trash_wheel = read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N336") %>%
+  janitor::clean_names() %>% 
+  drop_na(dumpster) %>%
+  mutate(sports_balls = as.integer(sports_balls, 0))
+    
+mr_trash_wheel
+```
+
+#Precipitation Data
+```{r}
+#Import, clean, and add year to 2017 data:
+precip_data_2018 = 
+  read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "2018 Precipitation", range = "A2:B9") %>%
+  janitor::clean_names() %>%
+  mutate(year = precip_data_2018$year <- 2018)
+  
+#Import, clean, and add year to 2017 data:
+precip_data_2017 = 
+  read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "2017 Precipitation", range = "A2:B14") %>%
+  janitor::clean_names() %>%
+  mutate(year = precip_data_2017$year <- 2017)
+  
+#Combine datasets: 
+precip_data = left_join(precip_data_2017, precip_data_2018, by = "month") %>%
+  rename(month_char = month.name)
+
+month_num = as.numeric(pull(precip_data, "month"))
+month_char = c(as.character(month_num))
+
+precip_data
+```
+
+#Problem 2 
+```{r}
+#Clean pol-month data
+pols_month = 
+  read.csv("./data/pols-month.csv") %>%
+  janitor::clean_names() %>%
+  separate(mon, into = c("year", "month", "day")) %>%
+  mutate(
+    month = month.name[month],
+    president = if_else(prez_gop == 1, "gop", "dem")) %>%
+  select(-prez_gop, -prez_dem, -day)
+
+#Clean snp data
+snp = 
+  read.csv("./data/snp.csv") %>%
+  janitor::clean_names() %>%
+  separate(date, into = c("month", "day", "year")) %>%
+  select(-day) %>%
+  mutate(month = month.name[month]) %>%
+  select(year, month, close)
+
+#Clean the unemployment data
+unemployment = 
+  read.csv("./data/unemployment.csv") %>%
+  janitor::clean_names() %>%
+  pivot_longer(
+    names_to = c("year", "month")
+    values_to = "count")
+```
+
+#Problem #3
+
+```{r}
+pop_baby_names =
+  read_csv("./data/Popular_Baby_Names.csv") %>%
+  janitor::clean_names() %>%
+  mutate(
+    gender = str_to_lower(gender),
+    ethnicity = str_to_lower(ethnicity), 
+    childs_first_name = str_to_lower(childs_first_name),
+    ethnicity = replace(ethnicity, ethnicity == "asian and paci", "asian and pacific islander"), 
+    ethnicity = replace(ethnicity, ethnicity == "black non hisp", "black non hispanic"), 
+    ethnicity = replace(ethnicity, ethnicity == "white non hisp", "white non hispanic")
+  ) %>%
+  unique(incomparables = FALSE)
+```
+
+##Popularity of the name Olivia from 2011 - 2016
+```{r}
+olivia =
+  read_csv("./data/Popular_Baby_Names.csv") %>%
+  janitor::clean_names() %>%
+  mutate(
+    gender = str_to_lower(gender),
+    ethnicity = str_to_lower(ethnicity), 
+    childs_first_name = str_to_lower(childs_first_name),
+    ethnicity = replace(ethnicity, ethnicity == "asian and paci", "asian and pacific islander"), 
+    ethnicity = replace(ethnicity, ethnicity == "black non hisp", "black non hispanic"), 
+    ethnicity = replace(ethnicity, ethnicity == "white non hisp", "white non hispanic")
+  ) %>%
+  filter(childs_first_name == "olivia") %>%
+  unique(incomparables = FALSE) %>%
+  select(year_of_birth, rank, ethnicity) %>%
+  arrange(year_of_birth, rank) %>%
+  pivot_wider(
+    names_from = "year_of_birth",
+    values_from = "rank"
+    )
+```
+
+##Popularity of the name Ethan
+```{r}
+ethan =
+  read_csv("./data/Popular_Baby_Names.csv") %>%
+  janitor::clean_names() %>%
+  mutate(
+    gender = str_to_lower(gender),
+    ethnicity = str_to_lower(ethnicity), 
+    childs_first_name = str_to_lower(childs_first_name),
+    ethnicity = replace(ethnicity, ethnicity == "asian and paci", "asian and pacific islander"), 
+    ethnicity = replace(ethnicity, ethnicity == "black non hisp", "black non hispanic"), 
+    ethnicity = replace(ethnicity, ethnicity == "white non hisp", "white non hispanic")
+  ) %>%
+  filter(childs_first_name == "ethan") %>%
+  unique(incomparables = FALSE) %>%
+  select(year_of_birth, rank, ethnicity) %>%
+  arrange(year_of_birth, rank) %>%
+  pivot_wider(
+    names_from = "year_of_birth",
+    values_from = "rank"
+    )
+```
+
+#Scatterplot of male, white non-hispanic children born in 2016
+```{r}
+library(ggridges)
+male_wt_2016 = read_csv("./data/Popular_Baby_Names.csv") %>%
+  janitor::clean_names() %>%
+  mutate(
+    gender = str_to_lower(gender),
+    ethnicity = str_to_lower(ethnicity), 
+    childs_first_name = str_to_lower(childs_first_name),
+    ethnicity = replace(ethnicity, ethnicity == "asian and paci", "asian and pacific islander"), 
+    ethnicity = replace(ethnicity, ethnicity == "black non hisp", "black non hispanic"), 
+    ethnicity = replace(ethnicity, ethnicity == "white non hisp", "white non hispanic")
+  ) %>%
+  filter(
+    gender == "male", 
+    year_of_birth == "2016",
+    ethnicity == "white non hispanic"
+    ) %>%
+  unique(incomparables = FALSE) %>%
+
+Male_Names = ggplot(male_wt_2016, aes(x = rank, y = count)) + geom_point() 
+print(Male_Names + ggtitle("Number of Male, White Non-Hispanic Children \nBorn in 2016 by Popularity") + labs(y = "Number of Children with a Name", x = "Rank in Popularity"))
+```
+
+
+

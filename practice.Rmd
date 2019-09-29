@@ -1,0 +1,29 @@
+---
+title: "practice"
+author: "Kodiak Soled"
+date: "9/28/2019"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+male_wt_2016 = 
+  read_csv("./data/Popular_Baby_Names.csv") %>%
+  janitor::clean_names() %>%
+  mutate(
+    gender = str_to_lower(gender),
+    ethnicity = str_to_lower(ethnicity), 
+    childs_first_name = str_to_lower(childs_first_name),
+    ethnicity = replace(ethnicity, ethnicity == "asian and paci", "asian and pacific islander"), 
+    ethnicity = replace(ethnicity, ethnicity == "black non hisp", "black non hispanic"), 
+    ethnicity = replace(ethnicity, ethnicity == "white non hisp", "white non hispanic")
+  ) %>%
+  filter(
+    gender == "male", 
+    year_of_birth == "2016",
+    ethnicity == "white non hispanic"
+    ) %>%
+  unique(incomparables = FALSE)
+    
+ggplot(male_wt_2016, aes(x = rank, y = count))
+```
