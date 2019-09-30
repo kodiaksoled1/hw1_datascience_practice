@@ -54,17 +54,16 @@ precip_data = full_join(precip_data_2017, precip_data_2018) %>%
 precip_data
 ```
 
-###The Mr. Trash Wheel dataset contains 14 variables (285 observations) including: dumpster, month, year, date, weight (tons), etc. from May of 2014 until July of 2018. It is contains `r nrow(mr_trash_wheel)` rows and `r ncol(mr_trash_wheel)` columns for a total of `r nrow(mr_trash_wheel)*ncol(mr_trash_wheel)` variables. The median number of sports balls in a dumpster in 2017 was `r median(pull(mr_trash_wheel, sports_balls))`.
-
+#CHECK ON THIS
 ```{r}
 #median number of sports balls in a dumpter in 2017
 mr_trash_wheel_2017 = read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N336") %>%
   janitor::clean_names() %>%
   drop_na(dumpster) %>%
   filter(year == "2017")
-
-median(pull(mr_trash_wheel_2017, sports_balls))
 ```
+
+###The Mr. Trash Wheel dataset contains 14 variables (285 observations) including: dumpster, month, year, date, weight (tons), etc. from May of 2014 until July of 2018. It is contains `r nrow(mr_trash_wheel)` rows and `r ncol(mr_trash_wheel)` columns for a total of `r nrow(mr_trash_wheel)*ncol(mr_trash_wheel)` variables. The median number of sports balls in a dumpster in 2017 was `r median(pull(mr_trash_wheel_2017, sports_balls))`.
 
 ###The combined precipition dataset has 18 observations and contains the total preciptation per month for the year 2017 and half of the  year 2018. It is contains `r nrow(precip_data)` rows and `r ncol(precip_data)` columns for a total of `r nrow(precip_data)*ncol(precip_data)` variables. In 2018 the total precipitation was `r sum(pull(precip_data_2018, total))`. 
 
@@ -232,6 +231,3 @@ male_wt_2016
 Male_Names = ggplot(male_wt_2016, aes(x = rank, y = count)) + geom_point() 
 print(Male_Names + ggtitle("Number of Male, White Non-Hispanic Children \nBorn in 2016 by Popularity") + labs(y = "Number of Children with a Name", x = "Rank in Popularity"))
 ```
-
-
-

@@ -143,11 +143,7 @@ precip_data
     ## 18 june       0.2   2018
     ## 19 july       2.39  2018
 
-\#\#\#The Mr. Trash Wheel dataset contains 14 variables (285
-observations) including: dumpster, month, year, date, weight (tons),
-etc. from May of 2014 until July of 2018. It is contains 285 rows and 14
-columns for a total of 3990 variables. The median number of sports balls
-in a dumpster in 2017 was 8.
+\#CHECK ON THIS
 
 ``` r
 #median number of sports balls in a dumpter in 2017
@@ -155,11 +151,13 @@ mr_trash_wheel_2017 = read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sh
   janitor::clean_names() %>%
   drop_na(dumpster) %>%
   filter(year == "2017")
-
-median(pull(mr_trash_wheel_2017, sports_balls))
 ```
 
-    ## [1] 8
+\#\#\#The Mr. Trash Wheel dataset contains 14 variables (285
+observations) including: dumpster, month, year, date, weight (tons),
+etc. from May of 2014 until July of 2018. It is contains 285 rows and 14
+columns for a total of 3990 variables. The median number of sports balls
+in a dumpster in 2017 was 8.
 
 \#\#\#The combined precipition dataset has 18 observations and contains
 the total preciptation per month for the year 2017 and half of the year
