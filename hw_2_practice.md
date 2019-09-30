@@ -153,16 +153,16 @@ mr_trash_wheel_2017 = read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sh
   filter(year == "2017")
 ```
 
-\#\#\#The Mr. Trash Wheel dataset contains 14 variables (285
-observations) including: dumpster, month, year, date, weight (tons),
-etc. from May of 2014 until July of 2018. It is contains 285 rows and 14
-columns for a total of 3990 variables. The median number of sports balls
-in a dumpster in 2017 was 8.
+\#\#\#The Mr. Trash Wheel dataset contains 14 variables including:
+dumpster, month, year, date, weight (tons), etc. from May of 2014 until
+July of 2018. It is contains 285 rows and 14 columns for a total of 3990
+observations The median number of sports balls in a dumpster in 2017 was
+8.
 
-\#\#\#The combined precipition dataset has 18 observations and contains
-the total preciptation per month for the year 2017 and half of the year
-2018. It is contains 19 rows and 3 columns for a total of 57 variables.
-In 2018 the total precipitation was 23.5.
+\#\#\#The combined precipition dataset contains the total preciptation
+per month for the year 2017 and half of the year 2018. It contains 19
+rows and 3 columns for a total of 57 observations. In 2018 the total
+precipitation was 23.5.
 
 \#Problem 2
 
@@ -315,16 +315,19 @@ pol_snp_unemployment_data
     ## # … with 812 more rows, and 3 more variables: gov_dem <dbl>,
     ## #   sen_dem <dbl>, rep_dem <dbl>
 
-\#\#\#The pols-month dataset contained 822 observations about the
-republican and democrat president, govenor, senator, and house
-representative from 1947-2015. The snp dataset contained 787
-observations about the closing rate of the snp from 1950-2015. The
-unemployment dataset contained 68 observations about the umployment rate
-by month from 1948-2015. \#\#\#The combined dataset contains data from
-1947 to 2015 on the variables: month, year, president, unemployment
-rate, the closing rate for the snp, and the govenor, senator, house of
-representatives of the democratic and republican parties. It is contains
-822 rows and 11 columns for a total of 9042 variables.
+\#\#\#The pols-month dataset contained 7398 observations (822 rows and 9
+columns) about the republican and democrat president, govenor, senator,
+and house representative from 1947-2015. The snp dataset contained 2361
+observations (787 rows and 3 columns) about the closing rate of the snp
+from 1950-2015. The unemployment dataset contained 2448 observations
+(816 rows and 3 columns) about the umployment rate by month from
+1948-2015.
+
+\#\#\#The combined dataset contains data from 1947 to 2015 on the
+variables: month, year, president, unemployment rate, the closing rate
+for the snp, and the govenor, senator, house of representatives of the
+democratic and republican parties. It is contains 822 rows and 11
+columns for a total of 9042 observations.
 
 \#Problem \#3
 

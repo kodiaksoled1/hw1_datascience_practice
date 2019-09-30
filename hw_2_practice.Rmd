@@ -63,9 +63,9 @@ mr_trash_wheel_2017 = read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sh
   filter(year == "2017")
 ```
 
-###The Mr. Trash Wheel dataset contains 14 variables (285 observations) including: dumpster, month, year, date, weight (tons), etc. from May of 2014 until July of 2018. It is contains `r nrow(mr_trash_wheel)` rows and `r ncol(mr_trash_wheel)` columns for a total of `r nrow(mr_trash_wheel)*ncol(mr_trash_wheel)` variables. The median number of sports balls in a dumpster in 2017 was `r median(pull(mr_trash_wheel_2017, sports_balls))`.
+###The Mr. Trash Wheel dataset contains `r length(mr_trash_wheel)` variables including: dumpster, month, year, date, weight (tons), etc. from May of 2014 until July of 2018. It is contains `r nrow(mr_trash_wheel)` rows and `r ncol(mr_trash_wheel)` columns for a total of `r nrow(mr_trash_wheel)*ncol(mr_trash_wheel)` observations The median number of sports balls in a dumpster in 2017 was `r median(pull(mr_trash_wheel_2017, sports_balls))`.
 
-###The combined precipition dataset has 18 observations and contains the total preciptation per month for the year 2017 and half of the  year 2018. It is contains `r nrow(precip_data)` rows and `r ncol(precip_data)` columns for a total of `r nrow(precip_data)*ncol(precip_data)` variables. In 2018 the total precipitation was `r sum(pull(precip_data_2018, total))`. 
+###The combined precipition dataset contains the total preciptation per month for the year 2017 and half of the  year 2018. It contains `r nrow(precip_data)` rows and `r ncol(precip_data)` columns for a total of `r nrow(precip_data)*ncol(precip_data)` observations. In 2018 the total precipitation was `r sum(pull(precip_data_2018, total))`. 
 
 #Problem 2 
 
@@ -130,8 +130,9 @@ pol_snp_unemployment_data =
 pol_snp_unemployment_data
 ```
 
-###The pols-month dataset contained 822 observations about the republican and democrat president, govenor, senator, and house representative from 1947-2015. The snp dataset contained 787 observations about the closing rate of the snp from 1950-2015. The unemployment dataset contained 68 observations about the umployment rate by month from 1948-2015. 
-###The combined dataset contains data from 1947 to 2015 on the variables: month, year, president, unemployment rate, the closing rate for the snp, and the govenor, senator, house of representatives of the democratic and republican parties. It is contains `r nrow(pol_snp_unemployment_data)` rows and `r ncol(pol_snp_unemployment_data)` columns for a total of `r nrow(pol_snp_unemployment_data)*ncol(pol_snp_unemployment_data)` variables. 
+###The pols-month dataset contained `r nrow(pols_month)*ncol(pols_month)` observations (`r nrow(pols_month)` rows and `r ncol(pols_month)` columns) about the republican and democrat president, govenor, senator, and house representative from 1947-2015. The snp dataset contained `r nrow(snp)*ncol(snp)` observations (`r nrow(snp)` rows and `r ncol(snp)` columns) about the closing rate of the snp from 1950-2015. The unemployment dataset contained `r nrow(unemployment)*ncol(unemployment)` observations (`r nrow(unemployment)` rows and `r ncol(unemployment)` columns) about the umployment rate by month from 1948-2015. 
+
+###The combined dataset contains data from 1947 to 2015 on the variables: month, year, president, unemployment rate, the closing rate for the snp, and the govenor, senator, house of representatives of the democratic and republican parties. It is contains `r nrow(pol_snp_unemployment_data)` rows and `r ncol(pol_snp_unemployment_data)` columns for a total of `r nrow(pol_snp_unemployment_data)*ncol(pol_snp_unemployment_data)` observations. 
 
 #Problem #3
 
