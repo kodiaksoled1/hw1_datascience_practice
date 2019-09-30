@@ -5,10 +5,6 @@ date: "9/28/2019"
 output: github_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 #Homework Problem #1
 
 ##Mr. Trash Wheel
@@ -18,74 +14,132 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
-###Then we can import the Excel file data, specify the sheets in the Excel file we want with the `sheets` function, omit non-data entries by specifying the columns we want to include with the `range` function. We also clean up the names of the variables with the `janitor` function. Next, we can omit the rows that do not include dumpster-specific data by using the `drop_na` function. Lastly, we will round the number of sports balls to the nearest integer and converts the result to an integer variable. 
+###Then we can load the `readxl` package in order to import the Excel file data using `read_excel`, specify the sheet in the Excel file we want with `sheets`, and omit non-data entries by specifying the columns and rows we want to include with the `range` function. We also clean up the names of the variables with the `janitor` function. Next, we can omit the rows that do not include dumpster-specific data by using `drop_na`. Lastly, we can round the number of sports balls to the nearest integer and convert the result to an integer variable using `as.integer`. 
 ```{r}
 library(readxl)
 mr_trash_wheel = read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N336") %>%
-  janitor::clean_names() %>% 
+  janitor::clean_names() %>%
   drop_na(dumpster) %>%
   mutate(sports_balls = as.integer(sports_balls, 0))
     
 mr_trash_wheel
 ```
 
-#Precipitation Data
+##Precipitation Data
+
+###First we can read (`read_excel`) and clean (`janitor`) the preciptation data for 2017 and 2018. Again, we can omit the rows without the precipitation data by specifying the `range` of rows and columns to include. Lastly, we can add a variable year to each data set with the `mutate` function. 
 ```{r}
-#Import, clean, and add year to 2017 data:
 precip_data_2018 = 
   read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "2018 Precipitation", range = "A2:B9") %>%
   janitor::clean_names() %>%
-  mutate(year = precip_data_2018$year <- 2018)
+  mutate(year = 2018)
+
+precip_data_2018
   
-#Import, clean, and add year to 2017 data:
 precip_data_2017 = 
   read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "2017 Precipitation", range = "A2:B14") %>%
   janitor::clean_names() %>%
-  mutate(year = precip_data_2017$year <- 2017)
-  
-#Combine datasets: 
-precip_data = left_join(precip_data_2017, precip_data_2018, by = "month") %>%
-  rename(month_char = month.name)
+  mutate(year = 2017)
+ 
+precip_data_2017
+``` 
 
-month_num = as.numeric(pull(precip_data, "month"))
-month_char = c(as.character(month_num))
+###Finally, we can combine the two datasets with the `full join` function since they both datasets have the same three variables in each respective dataframe. We can also convert the month as a numeric (1-12) to a character variable (january-december) so that the month names appear using `month.numeric`:
+```{r message = FALSE}
+precip_data = full_join(precip_data_2017, precip_data_2018) %>%
+  mutate(
+    month = month.name[month],
+    month = str_to_lower(month))
 
 precip_data
 ```
 
-#Problem 2 
+###The Mr. Trash Wheel dataset contains 14 variables (285 observations) including: dumpster, month, year, date, weight (tons), etc. from May of 2014 until July of 2018. It is contains `r nrow(mr_trash_wheel)` rows and `r ncol(mr_trash_wheel)` columns for a total of `r nrow(mr_trash_wheel)*ncol(mr_trash_wheel)` variables. The median number of sports balls in a dumpster in 2017 was `r median(pull(mr_trash_wheel, sports_balls))`.
+
 ```{r}
-#Clean pol-month data
-pols_month = 
-  read.csv("./data/pols-month.csv") %>%
+#median number of sports balls in a dumpter in 2017
+mr_trash_wheel_2017 = read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N336") %>%
+  janitor::clean_names() %>%
+  drop_na(dumpster) %>%
+  filter(year == "2017")
+
+median(pull(mr_trash_wheel_2017, sports_balls))
+```
+
+###The combined precipition dataset has 18 observations and contains the total preciptation per month for the year 2017 and half of the  year 2018. It is contains `r nrow(precip_data)` rows and `r ncol(precip_data)` columns for a total of `r nrow(precip_data)*ncol(precip_data)` variables. In 2018 the total precipitation was `r sum(pull(precip_data_2018, total))`. 
+
+#Problem 2 
+
+##FiveThiryEight
+
+###First we import (`read_csv`) and clean (`janitor`) the datasets: pols-month.csv, unemployment.csv, and snp.csv. Then, we can use the `separate` function to change the "date" variable into "year", "month", and "day" (note this isn't necessary for unemployment as it was already seperated). 
+
+###For the pols-month data, I replaced the month number with the abbreviated month name to match the unemployment dataset with `month.abb` under the `mutate` function (specifying the month as `as.integer` allowed us to do this). We also can create a new variable "president" under `mutate` with the `if_else` function and remove the prez_gap, prez_day, and day variable with `select` to clean up the dataset. 
+
+###We can then clean the snp data to look similar to the pols-month data by using many of the same functions as above (e.g., deleting the day variable with `select`, changing month as a number to a name with `month.abb` under the `mutate` function, etc.)  
+
+###The unemployment data needed to be reorganized from a "wide" to "long" format to match the first two datasets. The `pivot_longer` function allows us to do this. To match the other two datasets, we also needed to make the year a character vector which we did with the `mutate` and `as.character` functions. The cleaned datasets look like the following: 
+```{r message = FALSE}
+pols_month =
+  read_csv("./data/pols-month.csv") %>%
   janitor::clean_names() %>%
   separate(mon, into = c("year", "month", "day")) %>%
   mutate(
-    month = month.name[month],
+    month = month.abb[as.integer(month)],
+    month = str_to_lower(month),
     president = if_else(prez_gop == 1, "gop", "dem")) %>%
   select(-prez_gop, -prez_dem, -day)
 
-#Clean snp data
+pols_month
+
 snp = 
-  read.csv("./data/snp.csv") %>%
+  read_csv("./data/snp.csv") %>%
   janitor::clean_names() %>%
   separate(date, into = c("month", "day", "year")) %>%
   select(-day) %>%
-  mutate(month = month.name[month]) %>%
-  select(year, month, close)
+  mutate(
+    month = month.abb[as.integer(month)],
+    month = str_to_lower(month)) %>%
+  select(year, month, close) %>%
+  arrange(year, month) %>%
+  rename(snp_close = close)
 
-#Clean the unemployment data
+snp
+
 unemployment = 
-  read.csv("./data/unemployment.csv") %>%
+  read_csv("./data/unemployment.csv") %>%
   janitor::clean_names() %>%
   pivot_longer(
-    names_to = c("year", "month")
-    values_to = "count")
+    jan:dec,
+    names_to = "month",
+    values_to = "count") %>%
+  mutate(year = as.character(year)) %>%
+  rename(unemployment_rate = count)
+
+unemployment
 ```
+
+###Now we are readt to combine the three datasets. We can first merge the pols-month and snp datasets with the `left_join` function by the shared catagory of "month" and "year". Then we can merge this new dataset with the final dataset unemployment in the same fashion: 
+```{r}
+pol_snp_data = 
+  left_join(pols_month, snp, by = c("month", "year"))
+
+pol_snp_unemployment_data = 
+  left_join(pol_snp_data, unemployment, by = c("month", "year")) %>%
+  select(month, year, president, unemployment_rate, snp_close, everything())
+
+pol_snp_unemployment_data
+```
+
+###The pols-month dataset contained 822 observations about the republican and democrat president, govenor, senator, and house representative from 1947-2015. The snp dataset contained 787 observations about the closing rate of the snp from 1950-2015. The unemployment dataset contained 68 observations about the umployment rate by month from 1948-2015. 
+###The combined dataset contains data from 1947 to 2015 on the variables: month, year, president, unemployment rate, the closing rate for the snp, and the govenor, senator, house of representatives of the democratic and republican parties. It is contains `r nrow(pol_snp_unemployment_data)` rows and `r ncol(pol_snp_unemployment_data)` columns for a total of `r nrow(pol_snp_unemployment_data)*ncol(pol_snp_unemployment_data)` variables. 
 
 #Problem #3
 
-```{r}
+##NYC Open 
+
+###First we need to load (`read_csv`) the dataset pop_baby_names and tidy it. This includes cleaning the variable names (`janitor`), changing all the case structure of string variables to lower case (`str_to_lower`), making the string variables under ethnicity similar (e.g., making "asian and paci" and "asian and pacific islander" have the same name through the `replace` function), and deduplicating the dataset (`unique`). 
+```{r message = FALSE}
 pop_baby_names =
   read_csv("./data/Popular_Baby_Names.csv") %>%
   janitor::clean_names() %>%
@@ -98,10 +152,12 @@ pop_baby_names =
     ethnicity = replace(ethnicity, ethnicity == "white non hisp", "white non hispanic")
   ) %>%
   unique(incomparables = FALSE)
+
+pop_baby_names
 ```
 
-##Popularity of the name Olivia from 2011 - 2016
-```{r}
+###Then we can create a reader-friendly table that displays the popularity of the name Olivia from 2011-2016. To do this, we can perform the same cleaning as above, but we will also need to `filter` for the name Olivia, reorganize the variable order using `select` then `arrange`, and then `pivot_wider` the dataframe so that we can produce a table of the popularity of the name Olivia by ethnicity across time. 
+```{r message = FALSE}
 olivia =
   read_csv("./data/Popular_Baby_Names.csv") %>%
   janitor::clean_names() %>%
@@ -121,10 +177,12 @@ olivia =
     names_from = "year_of_birth",
     values_from = "rank"
     )
+
+olivia
 ```
 
-##Popularity of the name Ethan
-```{r}
+###The most popular male child's name can be identified by filtering pop_baby_names by gender, and seeing the name that ranked #1. This was Ethan. Then, the same produce can be repeated from the example above to produce a simar table of the popularity of the name Ethan by ethnicity across time.
+```{r message = FALSE}
 ethan =
   read_csv("./data/Popular_Baby_Names.csv") %>%
   janitor::clean_names() %>%
@@ -144,12 +202,15 @@ ethan =
     names_from = "year_of_birth",
     values_from = "rank"
     )
+
+ethan
 ```
 
-#Scatterplot of male, white non-hispanic children born in 2016
-```{r}
+###To produce a scatterplot of male, white non-hispanic children born in 2016, we need to first `filter` the dataset to screen for male gender, 2016 year, and white non hispanic ethnicity. Then we can create a scatterplot using `ggplot` of this new subset of the data that shows the number of children with a name against the rank in popularity of that name:
+```{r message = FALSE}
 library(ggridges)
-male_wt_2016 = read_csv("./data/Popular_Baby_Names.csv") %>%
+male_wt_2016 = 
+  read_csv("./data/Popular_Baby_Names.csv") %>%
   janitor::clean_names() %>%
   mutate(
     gender = str_to_lower(gender),
@@ -164,8 +225,10 @@ male_wt_2016 = read_csv("./data/Popular_Baby_Names.csv") %>%
     year_of_birth == "2016",
     ethnicity == "white non hispanic"
     ) %>%
-  unique(incomparables = FALSE) %>%
+  unique(incomparables = FALSE)
 
+male_wt_2016
+  
 Male_Names = ggplot(male_wt_2016, aes(x = rank, y = count)) + geom_point() 
 print(Male_Names + ggtitle("Number of Male, White Non-Hispanic Children \nBorn in 2016 by Popularity") + labs(y = "Number of Children with a Name", x = "Rank in Popularity"))
 ```
