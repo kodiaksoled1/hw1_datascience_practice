@@ -26,7 +26,7 @@ nearest integer and convert the result to an integer variable using
 
 ``` r
 library(readxl)
-mr_trash_wheel = read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N336") %>%
+mr_trash_wheel = read_excel("./data/TrashWheelCollectionTotals.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N406") %>%
   janitor::clean_names() %>%
   drop_na(dumpster) %>%
   mutate(sports_balls = as.integer(sports_balls, 0))
@@ -34,7 +34,7 @@ mr_trash_wheel = read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet =
 mr_trash_wheel
 ```
 
-    ## # A tibble: 285 x 14
+    ## # A tibble: 344 x 14
     ##    dumpster month  year date                weight_tons volume_cubic_ya…
     ##       <dbl> <chr> <dbl> <dttm>                    <dbl>            <dbl>
     ##  1        1 May    2014 2014-05-16 00:00:00        4.31               18
@@ -47,7 +47,7 @@ mr_trash_wheel
     ##  8        8 May    2014 2014-05-28 00:00:00        3.7                16
     ##  9        9 June   2014 2014-06-05 00:00:00        2.52               14
     ## 10       10 June   2014 2014-06-11 00:00:00        3.76               18
-    ## # … with 275 more rows, and 8 more variables: plastic_bottles <dbl>,
+    ## # … with 334 more rows, and 8 more variables: plastic_bottles <dbl>,
     ## #   polystyrene <dbl>, cigarette_butts <dbl>, glass_bottles <dbl>,
     ## #   grocery_bags <dbl>, chip_bags <dbl>, sports_balls <int>,
     ## #   homes_powered <dbl>
@@ -62,27 +62,32 @@ include. Lastly, we can add a variable year to each data set with the
 
 ``` r
 precip_data_2018 = 
-  read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "2018 Precipitation", range = "A2:B9") %>%
+  read_excel("./data/TrashWheelCollectionTotals.xlsx", sheet = "2018 Precipitation", range = "A2:B14") %>%
   janitor::clean_names() %>%
   mutate(year = 2018)
 
 precip_data_2018
 ```
 
-    ## # A tibble: 7 x 3
-    ##   month total  year
-    ##   <dbl> <dbl> <dbl>
-    ## 1     1  0.96  2018
-    ## 2     2  5.3   2018
-    ## 3     3  2.18  2018
-    ## 4     4  3.2   2018
-    ## 5     5  9.27  2018
-    ## 6     6  0.2   2018
-    ## 7     7  2.39  2018
+    ## # A tibble: 12 x 3
+    ##    month total  year
+    ##    <dbl> <dbl> <dbl>
+    ##  1     1  0.94  2018
+    ##  2     2  4.8   2018
+    ##  3     3  2.69  2018
+    ##  4     4  4.69  2018
+    ##  5     5  9.27  2018
+    ##  6     6  4.77  2018
+    ##  7     7 10.2   2018
+    ##  8     8  6.45  2018
+    ##  9     9 10.5   2018
+    ## 10    10  2.12  2018
+    ## 11    11  7.82  2018
+    ## 12    12  6.11  2018
 
 ``` r
 precip_data_2017 = 
-  read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "2017 Precipitation", range = "A2:B14") %>%
+  read_excel("./data/TrashWheelCollectionTotals.xlsx", sheet = "2017 Precipitation", range = "A2:B14") %>%
   janitor::clean_names() %>%
   mutate(year = 2017)
  
@@ -112,7 +117,8 @@ to a character variable (january-december) so that the month names
 appear using `month.numeric`:
 
 ``` r
-precip_data = full_join(precip_data_2017, precip_data_2018) %>%
+precip_data = 
+  bind_rows(precip_data_2017, precip_data_2018) %>%
   mutate(
     month = month.name[month],
     month = str_to_lower(month))
@@ -120,7 +126,7 @@ precip_data = full_join(precip_data_2017, precip_data_2018) %>%
 precip_data
 ```
 
-    ## # A tibble: 19 x 3
+    ## # A tibble: 24 x 3
     ##    month     total  year
     ##    <chr>     <dbl> <dbl>
     ##  1 january    2.34  2017
@@ -133,36 +139,18 @@ precip_data
     ##  8 august     4.44  2017
     ##  9 september  1.95  2017
     ## 10 october    0     2017
-    ## 11 november   0.11  2017
-    ## 12 december   0.94  2017
-    ## 13 january    0.96  2018
-    ## 14 february   5.3   2018
-    ## 15 march      2.18  2018
-    ## 16 april      3.2   2018
-    ## 17 may        9.27  2018
-    ## 18 june       0.2   2018
-    ## 19 july       2.39  2018
-
-\#CHECK ON THIS
-
-``` r
-#median number of sports balls in a dumpter in 2017
-mr_trash_wheel_2017 = read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N336") %>%
-  janitor::clean_names() %>%
-  drop_na(dumpster) %>%
-  filter(year == "2017")
-```
+    ## # … with 14 more rows
 
 \#\#\#The Mr. Trash Wheel dataset contains 14 variables including:
-dumpster, month, year, date, weight (tons), etc. from May of 2014 until
-July of 2018. It is contains 285 rows and 14 columns for a total of 3990
-observations The median number of sports balls in a dumpster in 2017 was
-8.
+dumpster, month, year, date, weight (tons), etc. from May 2014 until
+June 2019. It is contains 344 rows/observations and 14 columns/variables
+for a total of 4816 cells. The median number of sports balls in a
+dumpster in 2017 was 8.
 
 \#\#\#The combined precipition dataset contains the total preciptation
-per month for the year 2017 and half of the year 2018. It contains 19
-rows and 3 columns for a total of 57 observations. In 2018 the total
-precipitation was 23.5.
+per month for the years 2017 and 2018. It contains 24 rows/observations
+and 3 columns/variables for a total of 72 cells. In 2018 the total
+precipitation was 70.33.
 
 \#Problem 2
 
@@ -500,4 +488,4 @@ Male_Names = ggplot(male_wt_2016, aes(x = rank, y = count)) + geom_point()
 print(Male_Names + ggtitle("Number of Male, White Non-Hispanic Children \nBorn in 2016 by Popularity") + labs(y = "Number of Children with a Name", x = "Rank in Popularity"))
 ```
 
-![](hw_2_practice_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](hw_2_practice_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->

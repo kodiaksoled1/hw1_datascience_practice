@@ -17,7 +17,7 @@ library(tidyverse)
 ###Then we can load the `readxl` package in order to import the Excel file data using `read_excel`, specify the sheet in the Excel file we want with `sheets`, and omit non-data entries by specifying the columns and rows we want to include with the `range` function. We also clean up the names of the variables with the `janitor` function. Next, we can omit the rows that do not include dumpster-specific data by using `drop_na`. Lastly, we can round the number of sports balls to the nearest integer and convert the result to an integer variable using `as.integer`. 
 ```{r}
 library(readxl)
-mr_trash_wheel = read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N336") %>%
+mr_trash_wheel = read_excel("./data/TrashWheelCollectionTotals.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N406") %>%
   janitor::clean_names() %>%
   drop_na(dumpster) %>%
   mutate(sports_balls = as.integer(sports_balls, 0))
@@ -30,14 +30,14 @@ mr_trash_wheel
 ###First we can read (`read_excel`) and clean (`janitor`) the preciptation data for 2017 and 2018. Again, we can omit the rows without the precipitation data by specifying the `range` of rows and columns to include. Lastly, we can add a variable year to each data set with the `mutate` function. 
 ```{r}
 precip_data_2018 = 
-  read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "2018 Precipitation", range = "A2:B9") %>%
+  read_excel("./data/TrashWheelCollectionTotals.xlsx", sheet = "2018 Precipitation", range = "A2:B14") %>%
   janitor::clean_names() %>%
   mutate(year = 2018)
 
 precip_data_2018
   
 precip_data_2017 = 
-  read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "2017 Precipitation", range = "A2:B14") %>%
+  read_excel("./data/TrashWheelCollectionTotals.xlsx", sheet = "2017 Precipitation", range = "A2:B14") %>%
   janitor::clean_names() %>%
   mutate(year = 2017)
  
@@ -46,7 +46,8 @@ precip_data_2017
 
 ###Finally, we can combine the two datasets with the `full join` function since they both datasets have the same three variables in each respective dataframe. We can also convert the month as a numeric (1-12) to a character variable (january-december) so that the month names appear using `month.numeric`:
 ```{r message = FALSE}
-precip_data = full_join(precip_data_2017, precip_data_2018) %>%
+precip_data = 
+  bind_rows(precip_data_2017, precip_data_2018) %>%
   mutate(
     month = month.name[month],
     month = str_to_lower(month))
@@ -54,18 +55,9 @@ precip_data = full_join(precip_data_2017, precip_data_2018) %>%
 precip_data
 ```
 
-#CHECK ON THIS
-```{r}
-#median number of sports balls in a dumpter in 2017
-mr_trash_wheel_2017 = read_excel("./data/HealthyHarborWaterWheelTotals.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N336") %>%
-  janitor::clean_names() %>%
-  drop_na(dumpster) %>%
-  filter(year == "2017")
-```
+###The Mr. Trash Wheel dataset contains `r length(mr_trash_wheel)` variables including: dumpster, month, year, date, weight (tons), etc. from May 2014 until June 2019. It is contains `r nrow(mr_trash_wheel)` rows/observations and `r ncol(mr_trash_wheel)` columns/variables for a total of `r nrow(mr_trash_wheel)*ncol(mr_trash_wheel)` cells. The median number of sports balls in a dumpster in 2017 was `r median(pull(mr_trash_wheel %>% filter(year == "2017"), sports_balls))`.
 
-###The Mr. Trash Wheel dataset contains `r length(mr_trash_wheel)` variables including: dumpster, month, year, date, weight (tons), etc. from May of 2014 until July of 2018. It is contains `r nrow(mr_trash_wheel)` rows and `r ncol(mr_trash_wheel)` columns for a total of `r nrow(mr_trash_wheel)*ncol(mr_trash_wheel)` observations The median number of sports balls in a dumpster in 2017 was `r median(pull(mr_trash_wheel_2017, sports_balls))`.
-
-###The combined precipition dataset contains the total preciptation per month for the year 2017 and half of the  year 2018. It contains `r nrow(precip_data)` rows and `r ncol(precip_data)` columns for a total of `r nrow(precip_data)*ncol(precip_data)` observations. In 2018 the total precipitation was `r sum(pull(precip_data_2018, total))`. 
+###The combined precipition dataset contains the total preciptation per month for the years 2017 and 2018. It contains `r nrow(precip_data)` rows/observations and `r ncol(precip_data)` columns/variables for a total of `r nrow(precip_data)*ncol(precip_data)` cells. In 2018 the total precipitation was `r sum(pull(precip_data %>% filter(year == "2018"), total))`. 
 
 #Problem 2 
 
@@ -130,7 +122,7 @@ pol_snp_unemployment_data =
 pol_snp_unemployment_data
 ```
 
-###The pols-month dataset contained `r nrow(pols_month)*ncol(pols_month)` observations (`r nrow(pols_month)` rows and `r ncol(pols_month)` columns) about the republican and democrat president, govenor, senator, and house representative from 1947-2015. The snp dataset contained `r nrow(snp)*ncol(snp)` observations (`r nrow(snp)` rows and `r ncol(snp)` columns) about the closing rate of the snp from 1950-2015. The unemployment dataset contained `r nrow(unemployment)*ncol(unemployment)` observations (`r nrow(unemployment)` rows and `r ncol(unemployment)` columns) about the umployment rate by month from 1948-2015. 
+###The pols-month dataset contained `r nrow(pols_month)*ncol(pols_month)` observations (`r nrow(pols_month)` rows and `r ncol(pols_month)` columns) about the republican and democrat president, govenor, senator, and house representative from 1947-2015. The snp dataset contained `r nrow(snp)*ncol(snp)` observations (`r nrow(snp)` rows and `r ncol(snp)` columns) about the closing rate of the snp from 1950-2015. The unemployment dataset contained `r nrow(unemployment)*ncol(unemployment)` observations (`r nrow(unemployment)` rows and `r ncol(unemployment)` columns) about the umployment rate by month from 1948-2015.
 
 ###The combined dataset contains data from 1947 to 2015 on the variables: month, year, president, unemployment rate, the closing rate for the snp, and the govenor, senator, house of representatives of the democratic and republican parties. It is contains `r nrow(pol_snp_unemployment_data)` rows and `r ncol(pol_snp_unemployment_data)` columns for a total of `r nrow(pol_snp_unemployment_data)*ncol(pol_snp_unemployment_data)` observations. 
 
