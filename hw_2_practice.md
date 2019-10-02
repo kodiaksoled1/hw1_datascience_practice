@@ -3,6 +3,10 @@ Homework\_2\_practice
 Kodiak Soled
 9/28/2019
 
+*Note to TAs: you may need to* `install.packages(kableExtra)` *to run my
+code for problem
+\#3*
+
 # *Problem \#1*
 
 ## *Mr. Trash Wheel*
@@ -13,12 +17,30 @@ Kodiak Soled
 library(tidyverse)
 ```
 
-### Then, we can load the `readxl` package in order to import the Excel file data using `read_excel`, specify the sheet in the Excel file we want with `sheets`, and omit non-data entries by specifying the columns and rows we want to include with the `range` function. We can also clean up the names of the variables with the `janitor::clean_names()` function. Next, we can omit the rows that do not include dumpster-specific data by using `drop_na`. Lastly, we can round the number of sports balls to the nearest integer and convert the result to an integer variable using `as.integer`.
+### Then, we can load the `readxl` package in order to import the Excel file data:
 
 ``` r
 library(readxl)
+```
+
+### Now we can read (`read_excel`) and clean the dataset by:
+
+  - Specifying the sheet in the Excel file we want with `sheets`
+  - Omitting non-data entries by specifying the columns and rows we want
+    to include with the `range` function
+  - Cleaning up the names of the variables with the
+    `janitor::clean_names()` function
+  - Renaming the variables (`rename`) to have simplier names
+  - Omitting the rows that do not include dumpster-specific data by
+    using
+`drop_na`
+
+### Finally we can round the number of sports balls to the nearest integer and convert the result to an integer variable using `as.integer`.
+
+``` r
 mr_trash_wheel = read_excel("./data/TrashWheelCollectionTotals.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N406") %>%
   janitor::clean_names() %>%
+  rename(weight = weight_tons, volume = volume_cubic_yards) %>%
   drop_na(dumpster) %>%
   mutate(sports_balls = as.integer(sports_balls, 0))
     
@@ -26,26 +48,25 @@ mr_trash_wheel
 ```
 
     ## # A tibble: 344 x 14
-    ##    dumpster month  year date                weight_tons volume_cubic_ya…
-    ##       <dbl> <chr> <dbl> <dttm>                    <dbl>            <dbl>
-    ##  1        1 May    2014 2014-05-16 00:00:00        4.31               18
-    ##  2        2 May    2014 2014-05-16 00:00:00        2.74               13
-    ##  3        3 May    2014 2014-05-16 00:00:00        3.45               15
-    ##  4        4 May    2014 2014-05-17 00:00:00        3.1                15
-    ##  5        5 May    2014 2014-05-17 00:00:00        4.06               18
-    ##  6        6 May    2014 2014-05-20 00:00:00        2.71               13
-    ##  7        7 May    2014 2014-05-21 00:00:00        1.91                8
-    ##  8        8 May    2014 2014-05-28 00:00:00        3.7                16
-    ##  9        9 June   2014 2014-06-05 00:00:00        2.52               14
-    ## 10       10 June   2014 2014-06-11 00:00:00        3.76               18
-    ## # … with 334 more rows, and 8 more variables: plastic_bottles <dbl>,
-    ## #   polystyrene <dbl>, cigarette_butts <dbl>, glass_bottles <dbl>,
-    ## #   grocery_bags <dbl>, chip_bags <dbl>, sports_balls <int>,
-    ## #   homes_powered <dbl>
+    ##    dumpster month  year date                weight volume plastic_bottles
+    ##       <dbl> <chr> <dbl> <dttm>               <dbl>  <dbl>           <dbl>
+    ##  1        1 May    2014 2014-05-16 00:00:00   4.31     18            1450
+    ##  2        2 May    2014 2014-05-16 00:00:00   2.74     13            1120
+    ##  3        3 May    2014 2014-05-16 00:00:00   3.45     15            2450
+    ##  4        4 May    2014 2014-05-17 00:00:00   3.1      15            2380
+    ##  5        5 May    2014 2014-05-17 00:00:00   4.06     18             980
+    ##  6        6 May    2014 2014-05-20 00:00:00   2.71     13            1430
+    ##  7        7 May    2014 2014-05-21 00:00:00   1.91      8             910
+    ##  8        8 May    2014 2014-05-28 00:00:00   3.7      16            3580
+    ##  9        9 June   2014 2014-06-05 00:00:00   2.52     14            2400
+    ## 10       10 June   2014 2014-06-11 00:00:00   3.76     18            1340
+    ## # … with 334 more rows, and 7 more variables: polystyrene <dbl>,
+    ## #   cigarette_butts <dbl>, glass_bottles <dbl>, grocery_bags <dbl>,
+    ## #   chip_bags <dbl>, sports_balls <int>, homes_powered <dbl>
 
 ## *Precipitation Data*
 
-### First, we can read (`read_excel`) and clean (`janitor::clean_names()`) the preciptation data for years 2017 and 2018. Again, we can omit the rows without the precipitation data by specifying the `range` of rows and columns to include. Lastly, we can add a variable year to each data set with the `mutate` function.
+### First, we can read (`read_excel`) and clean (`janitor::clean_names()`) the preciptation data for the two datasheets that contains 2017 and 2018 data. Again, we can omit the rows without the precipitation data by specifying the `range` of rows and columns to include. Lastly, we can add a variable year to each data set with the `mutate` function.
 
 ``` r
 precip_data_2018 = 
@@ -147,13 +168,27 @@ precip_data
 
 ## *FiveThiryEight*
 
-### First, we can import (`read_csv`) and clean (`janitor::clean_names()`) the three datasets: pols-month.csv, unemployment.csv, and snp.csv. Then, we can use the `separate` function to change the “date” variable into three varaibles (“year”, “month”, and “day”) for the pols-month and snp datasets (*note: this isn’t necessary for the unemployment dataset as it was already seperated by date*).
+### First, we can import (`read_csv`) and clean (`janitor::clean_names()`) the three datasets: pols-month.csv, unemployment.csv, and snp.csv. Then, for the pols-month and snp datasets, we can use the `separate` function to change the “date” variable into three variables (“year”, “month”, and “day”) (*note: this isn’t necessary for the unemployment dataset as it was already seperated by date*). Then we can make specific modifications to each dataset in order to merge them:
 
-### Specifically for the pols-month data, we can replace the month number with the abbreviated month name (to match the unemployment dataset that contains abbreviated month names) with `month.abb` under the `mutate` function, after specifying the month as an integer (`as.integer`). We also can create a new variable “president” under `mutate` with the `if_else` function and remove the “prez\_gap”, “prez\_day”, and “day” variables with `select` to clean up the dataset.
+  - For the pols-month data, we can replace the month number with the
+    abbreviated month name (to match the unemployment dataset that
+    contains abbreviated month names) with `month.abb` under the
+    `mutate` function, after specifying the month as an integer
+    (`as.integer`). We also can create a new variable “president” under
+    `mutate` with the `if_else` function and remove the “prez\_gap”,
+    “prez\_day”, and “day” variables with `select` to clean up the
+    dataset.
 
-### We can then specifically clean the snp data to look similar to the pols-month data by using many of the same functions as above (e.g., deleting the “day” variable with `select`, changing month as a number to a name with `month.abb` under the `mutate` function, etc.)
+  - We can then clean the snp data to look similar to the pols-month
+    data by using many of the same functions as above (e.g., deleting
+    the “day” variable with `select`, changing month as a number to a
+    name with `month.abb` under the `mutate` function, etc.)
 
-### The unemployment data specifically needed to be reorganized from a “wide” to “long” format to match the first two datasets. The `pivot_longer` function allows us to do this. We also needed to make“year” into a character vector which we can do with `as.character` under the `mutate` function.
+  - The unemployment data needed to be reorganized from a “wide” to
+    “long” format to match the first two datasets. The `pivot_longer`
+    function allows us to do this. We also needed to make“year” into a
+    character vector which we can do with `as.character` under the
+    `mutate` function.
 
 ### The cleaned datasets look like the following:
 
@@ -300,12 +335,13 @@ cells.
 ### First, we need to load (`read_csv`) the dataset pop\_baby\_names and tidy it. This includes:
 
   - Cleaning the variable names (`janitor::clean_names()`)
+  - Making the varaible names simple with `rename`
   - Changing all the case structure of string variables to lower case
     (`str_to_lower`)
   - Making the string variables under ethnicity similar (e.g., making
     “asian and paci” and “asian and pacific islander” have the same
     name through the `replace` function)
-  - Deduplicating the dataset (`unique`)
+  - Deduplicating the dataset (`distinct`)
 
 <!-- end list -->
 
@@ -313,32 +349,33 @@ cells.
 pop_baby_names =
   read_csv("./data/Popular_Baby_Names.csv") %>%
   janitor::clean_names() %>%
+  rename("year" = year_of_birth, "name" = childs_first_name) %>%
   mutate(
     gender = str_to_lower(gender),
     ethnicity = str_to_lower(ethnicity), 
-    childs_first_name = str_to_lower(childs_first_name),
+    name = str_to_lower(name),
     ethnicity = replace(ethnicity, ethnicity == "asian and paci", "asian and pacific islander"), 
     ethnicity = replace(ethnicity, ethnicity == "black non hisp", "black non hispanic"), 
     ethnicity = replace(ethnicity, ethnicity == "white non hisp", "white non hispanic")
   ) %>%
-  unique(incomparables = FALSE)
+  distinct()
 
 pop_baby_names
 ```
 
     ## # A tibble: 12,181 x 6
-    ##    year_of_birth gender ethnicity              childs_first_na… count  rank
-    ##            <dbl> <chr>  <chr>                  <chr>            <dbl> <dbl>
-    ##  1          2016 female asian and pacific isl… olivia             172     1
-    ##  2          2016 female asian and pacific isl… chloe              112     2
-    ##  3          2016 female asian and pacific isl… sophia             104     3
-    ##  4          2016 female asian and pacific isl… emily               99     4
-    ##  5          2016 female asian and pacific isl… emma                99     4
-    ##  6          2016 female asian and pacific isl… mia                 79     5
-    ##  7          2016 female asian and pacific isl… charlotte           59     6
-    ##  8          2016 female asian and pacific isl… sarah               57     7
-    ##  9          2016 female asian and pacific isl… isabella            56     8
-    ## 10          2016 female asian and pacific isl… hannah              56     8
+    ##     year gender ethnicity                  name      count  rank
+    ##    <dbl> <chr>  <chr>                      <chr>     <dbl> <dbl>
+    ##  1  2016 female asian and pacific islander olivia      172     1
+    ##  2  2016 female asian and pacific islander chloe       112     2
+    ##  3  2016 female asian and pacific islander sophia      104     3
+    ##  4  2016 female asian and pacific islander emily        99     4
+    ##  5  2016 female asian and pacific islander emma         99     4
+    ##  6  2016 female asian and pacific islander mia          79     5
+    ##  7  2016 female asian and pacific islander charlotte    59     6
+    ##  8  2016 female asian and pacific islander sarah        57     7
+    ##  9  2016 female asian and pacific islander isabella     56     8
+    ## 10  2016 female asian and pacific islander hannah       56     8
     ## # … with 12,171 more rows
 
 ### Then, we can create a reader-friendly table that displays the popularity of the name Olivia from 2011-2016. To do this, we can perform the same cleaning as above, but we will also need to:
@@ -358,11 +395,11 @@ library(kableExtra)
 library(knitr)
 olivia = 
   pop_baby_names %>%
-  filter(childs_first_name == "olivia") %>%
-  select(year_of_birth, rank, ethnicity) %>%
-  arrange(year_of_birth, rank) %>%
+  filter(name == "olivia") %>%
+  select(year, rank, ethnicity) %>%
+  arrange(year, rank) %>%
   pivot_wider(
-    names_from = "year_of_birth",
+    names_from = "year",
     values_from = "rank"
     ) %>%
   kable(caption = "Popularity of the Name 'Olivia' by Ethnicity from 2011-2016") %>%
@@ -625,26 +662,26 @@ hispanic
 ``` r
 male_names_by_rank =
   pop_baby_names %>%
-  group_by(year_of_birth) %>% 
+  group_by(year) %>% 
   filter(gender == "male", rank == "1")
 
 male_names_by_rank
 ```
 
     ## # A tibble: 24 x 6
-    ## # Groups:   year_of_birth [6]
-    ##    year_of_birth gender ethnicity              childs_first_na… count  rank
-    ##            <dbl> <chr>  <chr>                  <chr>            <dbl> <dbl>
-    ##  1          2016 male   asian and pacific isl… ethan              193     1
-    ##  2          2016 male   black non hispanic     noah               148     1
-    ##  3          2016 male   hispanic               liam               387     1
-    ##  4          2016 male   white non hispanic     joseph             261     1
-    ##  5          2015 male   asian and pacific isl… jayden             190     1
-    ##  6          2015 male   black non hispanic     noah               163     1
-    ##  7          2015 male   hispanic               liam               356     1
-    ##  8          2015 male   white non hispanic     david              299     1
-    ##  9          2014 male   asian and pacific isl… jayden             187     1
-    ## 10          2014 male   black non hispanic     ethan              138     1
+    ## # Groups:   year [6]
+    ##     year gender ethnicity                  name   count  rank
+    ##    <dbl> <chr>  <chr>                      <chr>  <dbl> <dbl>
+    ##  1  2016 male   asian and pacific islander ethan    193     1
+    ##  2  2016 male   black non hispanic         noah     148     1
+    ##  3  2016 male   hispanic                   liam     387     1
+    ##  4  2016 male   white non hispanic         joseph   261     1
+    ##  5  2015 male   asian and pacific islander jayden   190     1
+    ##  6  2015 male   black non hispanic         noah     163     1
+    ##  7  2015 male   hispanic                   liam     356     1
+    ##  8  2015 male   white non hispanic         david    299     1
+    ##  9  2014 male   asian and pacific islander jayden   187     1
+    ## 10  2014 male   black non hispanic         ethan    138     1
     ## # … with 14 more rows
 
 ### Then, the same procedure can be repeated from the example above in Olivia to produce a simar table of the popularity of the name Ethan by ethnicity across time:
@@ -652,11 +689,11 @@ male_names_by_rank
 ``` r
 ethan =
   pop_baby_names %>%
-  filter(childs_first_name == "ethan") %>%
-  select(year_of_birth, rank, ethnicity) %>%
-  arrange(year_of_birth, rank) %>%
+  filter(name == "ethan") %>%
+  select(year, rank, ethnicity) %>%
+  arrange(year, rank) %>%
   pivot_wider(
-    names_from = "year_of_birth",
+    names_from = "year",
     values_from = "rank"
     ) %>%
   kable(caption = "Popularity of the Name 'Ethan' by Ethnicity from 2011-2016") %>% 
@@ -923,7 +960,7 @@ male_wt_2016 =
   pop_baby_names %>%
   filter(
     gender == "male", 
-    year_of_birth == "2016",
+    year == "2016",
     ethnicity == "white non hispanic"
     )
 
@@ -931,23 +968,21 @@ male_wt_2016
 ```
 
     ## # A tibble: 364 x 6
-    ##    year_of_birth gender ethnicity          childs_first_name count  rank
-    ##            <dbl> <chr>  <chr>              <chr>             <dbl> <dbl>
-    ##  1          2016 male   white non hispanic joseph              261     1
-    ##  2          2016 male   white non hispanic michael             260     2
-    ##  3          2016 male   white non hispanic david               255     3
-    ##  4          2016 male   white non hispanic moshe               239     4
-    ##  5          2016 male   white non hispanic jacob               236     5
-    ##  6          2016 male   white non hispanic james               231     6
-    ##  7          2016 male   white non hispanic benjamin            219     7
-    ##  8          2016 male   white non hispanic alexander           211     8
-    ##  9          2016 male   white non hispanic daniel              196     9
-    ## 10          2016 male   white non hispanic henry               196     9
+    ##     year gender ethnicity          name      count  rank
+    ##    <dbl> <chr>  <chr>              <chr>     <dbl> <dbl>
+    ##  1  2016 male   white non hispanic joseph      261     1
+    ##  2  2016 male   white non hispanic michael     260     2
+    ##  3  2016 male   white non hispanic david       255     3
+    ##  4  2016 male   white non hispanic moshe       239     4
+    ##  5  2016 male   white non hispanic jacob       236     5
+    ##  6  2016 male   white non hispanic james       231     6
+    ##  7  2016 male   white non hispanic benjamin    219     7
+    ##  8  2016 male   white non hispanic alexander   211     8
+    ##  9  2016 male   white non hispanic daniel      196     9
+    ## 10  2016 male   white non hispanic henry       196     9
     ## # … with 354 more rows
 
-Now we can create a scatterplot using `ggplot` of this new subset of the
-data that shows the number of children with a name against the rank in
-popularity of that name:
+### Now we can create a scatterplot using `ggplot` of this new subset of the data that shows the number of children with a name against the rank in popularity of that name:
 
 ``` r
 male_names = 
@@ -966,4 +1001,4 @@ male_names =
 male_names
 ```
 
-![](hw_2_practice_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](hw_2_practice_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
