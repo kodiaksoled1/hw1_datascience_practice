@@ -173,79 +173,79 @@ pop_baby_names
 * `pivot_wider` the dataframe so that we can produce a reader-friendly table of the popularity of the name Olivia by ethnicity across time
 
 ```{r message = FALSE}
-olivia =
-  read_csv("./data/Popular_Baby_Names.csv") %>%
-  janitor::clean_names() %>%
-  mutate(
-    gender = str_to_lower(gender),
-    ethnicity = str_to_lower(ethnicity), 
-    childs_first_name = str_to_lower(childs_first_name),
-    ethnicity = replace(ethnicity, ethnicity == "asian and paci", "asian and pacific islander"), 
-    ethnicity = replace(ethnicity, ethnicity == "black non hisp", "black non hispanic"), 
-    ethnicity = replace(ethnicity, ethnicity == "white non hisp", "white non hispanic")
-  ) %>%
+library(knitr)
+olivia = 
+  pop_baby_names %>%
   filter(childs_first_name == "olivia") %>%
-  unique(incomparables = FALSE) %>%
   select(year_of_birth, rank, ethnicity) %>%
   arrange(year_of_birth, rank) %>%
   pivot_wider(
     names_from = "year_of_birth",
     values_from = "rank"
-    )
+    ) %>%
+    kable(caption = "Popularity of the name Olivia by ethnicity from 2011-2016")
 
 olivia
 ```
 
-### The most popular male child's name can be identified by filtering (`filter`) the "pop_baby_names" dateset by gender ("male"), and viewing (`view`) the datset to see the name that ranked #1. This name was Ethan. Then, the same procedure can be repeated from the example above to produce a simar table of the popularity of the name Ethan by ethnicity across time: 
+### The most popular male child's name can be identified by filtering (`filter`) the "pop_baby_names" dateset by gender ("male"), and arranging (`arrange`) the datset by rank to see the name that is most popular. This name was Ethan. 
+
+```{r}
+male_names_by_rank =
+  pop_baby_names %>%
+  group_by(year_of_birth) %>% 
+  filter(gender == "male", rank == "1")
+
+male_names_by_rank
+```
+
+### Then, the same procedure can be repeated from the example above in Olivia to produce a simar table of the popularity of the name Ethan by ethnicity across time: 
 
 ```{r message = FALSE}
 ethan =
-  read_csv("./data/Popular_Baby_Names.csv") %>%
-  janitor::clean_names() %>%
-  mutate(
-    gender = str_to_lower(gender),
-    ethnicity = str_to_lower(ethnicity), 
-    childs_first_name = str_to_lower(childs_first_name),
-    ethnicity = replace(ethnicity, ethnicity == "asian and paci", "asian and pacific islander"), 
-    ethnicity = replace(ethnicity, ethnicity == "black non hisp", "black non hispanic"), 
-    ethnicity = replace(ethnicity, ethnicity == "white non hisp", "white non hispanic")
-  ) %>%
+  pop_baby_names %>%
   filter(childs_first_name == "ethan") %>%
-  unique(incomparables = FALSE) %>%
   select(year_of_birth, rank, ethnicity) %>%
   arrange(year_of_birth, rank) %>%
   pivot_wider(
     names_from = "year_of_birth",
     values_from = "rank"
-    )
+    ) %>%
+  kable(caption = "Popularity of the name Ethan by ethnicity from 2011-2016")
 
 ethan
 ```
 
-### To produce a scatterplot of male, white non-hispanic children born in 2016, we need to first `filter` the dataset to screen for "male" gender, "2016" year, and "white non hispanic" ethnicity. Then we can create a scatterplot using `ggplot` of this new subset of the data that shows the number of children with a name against the rank in popularity of that name:
+### To produce a scatterplot of male, white non-hispanic children born in 2016, we need to first `filter` the dataset to screen for "male" gender, "2016" year, and "white non hispanic" ethnicity:
 
 ```{r message = FALSE}
 library(ggridges)
 male_wt_2016 = 
-  read_csv("./data/Popular_Baby_Names.csv") %>%
-  janitor::clean_names() %>%
-  mutate(
-    gender = str_to_lower(gender),
-    ethnicity = str_to_lower(ethnicity), 
-    childs_first_name = str_to_lower(childs_first_name),
-    ethnicity = replace(ethnicity, ethnicity == "asian and paci", "asian and pacific islander"), 
-    ethnicity = replace(ethnicity, ethnicity == "black non hisp", "black non hispanic"), 
-    ethnicity = replace(ethnicity, ethnicity == "white non hisp", "white non hispanic")
-  ) %>%
+  pop_baby_names %>%
   filter(
     gender == "male", 
     year_of_birth == "2016",
     ethnicity == "white non hispanic"
-    ) %>%
-  unique(incomparables = FALSE)
+    )
 
 male_wt_2016
+```
+
+Now we can create a scatterplot using `ggplot` of this new subset of the data that shows the number of children with a name against the rank in popularity of that name:
+
+```{r}
+male_names = 
+  male_wt_2016 %>%
+  ggplot(aes(x = rank, y = count)) +
+  geom_point(aes(color = "pink", alpha = .5)) + 
+  labs(
+    title = "Number of Male, White Non-Hispanic Children \nBorn in 2016 by Popularity",
+    x = "Rank in Popularity",
+    y = "Number of Children with a Name", 
+    caption = "Data from the Popular Baby Names dataset"
+    )  + 
+  theme_classic() +
+  theme(legend.position = "none")
   
-Male_Names = ggplot(male_wt_2016, aes(x = rank, y = count)) + geom_point() 
-print(Male_Names + ggtitle("Number of Male, White Non-Hispanic Children \nBorn in 2016 by Popularity") + labs(y = "Number of Children with a Name", x = "Rank in Popularity"))
+male_names
 ```

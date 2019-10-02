@@ -351,92 +351,96 @@ pop_baby_names
 <!-- end list -->
 
 ``` r
-olivia =
-  read_csv("./data/Popular_Baby_Names.csv") %>%
-  janitor::clean_names() %>%
-  mutate(
-    gender = str_to_lower(gender),
-    ethnicity = str_to_lower(ethnicity), 
-    childs_first_name = str_to_lower(childs_first_name),
-    ethnicity = replace(ethnicity, ethnicity == "asian and paci", "asian and pacific islander"), 
-    ethnicity = replace(ethnicity, ethnicity == "black non hisp", "black non hispanic"), 
-    ethnicity = replace(ethnicity, ethnicity == "white non hisp", "white non hispanic")
-  ) %>%
+library(knitr)
+olivia = 
+  pop_baby_names %>%
   filter(childs_first_name == "olivia") %>%
-  unique(incomparables = FALSE) %>%
   select(year_of_birth, rank, ethnicity) %>%
   arrange(year_of_birth, rank) %>%
   pivot_wider(
     names_from = "year_of_birth",
     values_from = "rank"
-    )
+    ) %>%
+    kable(caption = "Popularity of the name Olivia by ethnicity from 2011-2016")
 
 olivia
 ```
 
-    ## # A tibble: 4 x 7
-    ##   ethnicity                  `2011` `2012` `2013` `2014` `2015` `2016`
-    ##   <chr>                       <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-    ## 1 white non hispanic              2      4      1      1      1      1
-    ## 2 asian and pacific islander      4      3      3      1      1      1
-    ## 3 black non hispanic             10      8      6      8      4      8
-    ## 4 hispanic                       18     22     22     16     16     13
+| ethnicity                  | 2011 | 2012 | 2013 | 2014 | 2015 | 2016 |
+| :------------------------- | ---: | ---: | ---: | ---: | ---: | ---: |
+| white non hispanic         |    2 |    4 |    1 |    1 |    1 |    1 |
+| asian and pacific islander |    4 |    3 |    3 |    1 |    1 |    1 |
+| black non hispanic         |   10 |    8 |    6 |    8 |    4 |    8 |
+| hispanic                   |   18 |   22 |   22 |   16 |   16 |   13 |
 
-### The most popular male child’s name can be identified by filtering (`filter`) the “pop\_baby\_names” dateset by gender (“male”), and viewing (`view`) the datset to see the name that ranked \#1. This name was Ethan. Then, the same procedure can be repeated from the example above to produce a simar table of the popularity of the name Ethan by ethnicity across time:
+Popularity of the name Olivia by ethnicity from
+2011-2016
+
+### The most popular male child’s name can be identified by filtering (`filter`) the “pop\_baby\_names” dateset by gender (“male”), and arranging (`arrange`) the datset by rank to see the name that is most popular. This name was Ethan.
+
+``` r
+male_names_by_rank =
+  pop_baby_names %>%
+  group_by(year_of_birth) %>% 
+  filter(gender == "male", rank == "1")
+
+male_names_by_rank
+```
+
+    ## # A tibble: 24 x 6
+    ## # Groups:   year_of_birth [6]
+    ##    year_of_birth gender ethnicity              childs_first_na… count  rank
+    ##            <dbl> <chr>  <chr>                  <chr>            <dbl> <dbl>
+    ##  1          2016 male   asian and pacific isl… ethan              193     1
+    ##  2          2016 male   black non hispanic     noah               148     1
+    ##  3          2016 male   hispanic               liam               387     1
+    ##  4          2016 male   white non hispanic     joseph             261     1
+    ##  5          2015 male   asian and pacific isl… jayden             190     1
+    ##  6          2015 male   black non hispanic     noah               163     1
+    ##  7          2015 male   hispanic               liam               356     1
+    ##  8          2015 male   white non hispanic     david              299     1
+    ##  9          2014 male   asian and pacific isl… jayden             187     1
+    ## 10          2014 male   black non hispanic     ethan              138     1
+    ## # … with 14 more rows
+
+### Then, the same procedure can be repeated from the example above in Olivia to produce a simar table of the popularity of the name Ethan by ethnicity across time:
 
 ``` r
 ethan =
-  read_csv("./data/Popular_Baby_Names.csv") %>%
-  janitor::clean_names() %>%
-  mutate(
-    gender = str_to_lower(gender),
-    ethnicity = str_to_lower(ethnicity), 
-    childs_first_name = str_to_lower(childs_first_name),
-    ethnicity = replace(ethnicity, ethnicity == "asian and paci", "asian and pacific islander"), 
-    ethnicity = replace(ethnicity, ethnicity == "black non hisp", "black non hispanic"), 
-    ethnicity = replace(ethnicity, ethnicity == "white non hisp", "white non hispanic")
-  ) %>%
+  pop_baby_names %>%
   filter(childs_first_name == "ethan") %>%
-  unique(incomparables = FALSE) %>%
   select(year_of_birth, rank, ethnicity) %>%
   arrange(year_of_birth, rank) %>%
   pivot_wider(
     names_from = "year_of_birth",
     values_from = "rank"
-    )
+    ) %>%
+  kable(caption = "Popularity of the name Ethan by ethnicity from 2011-2016")
 
 ethan
 ```
 
-    ## # A tibble: 4 x 7
-    ##   ethnicity                  `2011` `2012` `2013` `2014` `2015` `2016`
-    ##   <chr>                       <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-    ## 1 asian and pacific islander      1      2      2      2      2      1
-    ## 2 black non hispanic              6      3      1      1      5      5
-    ## 3 hispanic                        6      4      5      5      3      7
-    ## 4 white non hispanic             26     21     23     18     19     20
+| ethnicity                  | 2011 | 2012 | 2013 | 2014 | 2015 | 2016 |
+| :------------------------- | ---: | ---: | ---: | ---: | ---: | ---: |
+| asian and pacific islander |    1 |    2 |    2 |    2 |    2 |    1 |
+| black non hispanic         |    6 |    3 |    1 |    1 |    5 |    5 |
+| hispanic                   |    6 |    4 |    5 |    5 |    3 |    7 |
+| white non hispanic         |   26 |   21 |   23 |   18 |   19 |   20 |
 
-### To produce a scatterplot of male, white non-hispanic children born in 2016, we need to first `filter` the dataset to screen for “male” gender, “2016” year, and “white non hispanic” ethnicity. Then we can create a scatterplot using `ggplot` of this new subset of the data that shows the number of children with a name against the rank in popularity of that name:
+Popularity of the name Ethan by ethnicity from
+2011-2016
+
+### To produce a scatterplot of male, white non-hispanic children born in 2016, we need to first `filter` the dataset to screen for “male” gender, “2016” year, and “white non hispanic” ethnicity:
 
 ``` r
 library(ggridges)
 male_wt_2016 = 
-  read_csv("./data/Popular_Baby_Names.csv") %>%
-  janitor::clean_names() %>%
-  mutate(
-    gender = str_to_lower(gender),
-    ethnicity = str_to_lower(ethnicity), 
-    childs_first_name = str_to_lower(childs_first_name),
-    ethnicity = replace(ethnicity, ethnicity == "asian and paci", "asian and pacific islander"), 
-    ethnicity = replace(ethnicity, ethnicity == "black non hisp", "black non hispanic"), 
-    ethnicity = replace(ethnicity, ethnicity == "white non hisp", "white non hispanic")
-  ) %>%
+  pop_baby_names %>%
   filter(
     gender == "male", 
     year_of_birth == "2016",
     ethnicity == "white non hispanic"
-    ) %>%
-  unique(incomparables = FALSE)
+    )
 
 male_wt_2016
 ```
@@ -456,9 +460,25 @@ male_wt_2016
     ## 10          2016 male   white non hispanic henry               196     9
     ## # … with 354 more rows
 
+Now we can create a scatterplot using `ggplot` of this new subset of the
+data that shows the number of children with a name against the rank in
+popularity of that name:
+
 ``` r
-Male_Names = ggplot(male_wt_2016, aes(x = rank, y = count)) + geom_point() 
-print(Male_Names + ggtitle("Number of Male, White Non-Hispanic Children \nBorn in 2016 by Popularity") + labs(y = "Number of Children with a Name", x = "Rank in Popularity"))
+male_names = 
+  male_wt_2016 %>%
+  ggplot(aes(x = rank, y = count)) +
+  geom_point(aes(color = "pink", alpha = .5)) + 
+  labs(
+    title = "Number of Male, White Non-Hispanic Children \nBorn in 2016 by Popularity",
+    x = "Rank in Popularity",
+    y = "Number of Children with a Name", 
+    caption = "Data from the Popular Baby Names dataset"
+    )  + 
+  theme_classic() +
+  theme(legend.position = "none")
+  
+male_names
 ```
 
-![](hw_2_practice_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](hw_2_practice_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
