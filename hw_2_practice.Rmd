@@ -3,6 +3,7 @@ title: "Homework_2_practice"
 author: "Kodiak Soled"
 date: "9/28/2019"
 output: github_document
+always_allow_html: yes
 ---
 
 # *Problem #1*
@@ -173,6 +174,7 @@ pop_baby_names
 * `pivot_wider` the dataframe so that we can produce a reader-friendly table of the popularity of the name Olivia by ethnicity across time
 
 ```{r message = FALSE}
+library(kableExtra)
 library(knitr)
 olivia = 
   pop_baby_names %>%
@@ -183,7 +185,8 @@ olivia =
     names_from = "year_of_birth",
     values_from = "rank"
     ) %>%
-    kable(caption = "Popularity of the name Olivia by ethnicity from 2011-2016")
+  kable(caption = "Popularity of the Name 'Olivia' by Ethnicity from 2011-2016") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 
 olivia
 ```
@@ -211,7 +214,9 @@ ethan =
     names_from = "year_of_birth",
     values_from = "rank"
     ) %>%
-  kable(caption = "Popularity of the name Ethan by ethnicity from 2011-2016")
+  kable(caption = "Popularity of the Name 'Ethan' by Ethnicity from 2011-2016") %>%
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
 
 ethan
 ```

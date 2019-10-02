@@ -351,6 +351,7 @@ pop_baby_names
 <!-- end list -->
 
 ``` r
+library(kableExtra)
 library(knitr)
 olivia = 
   pop_baby_names %>%
@@ -361,20 +362,260 @@ olivia =
     names_from = "year_of_birth",
     values_from = "rank"
     ) %>%
-    kable(caption = "Popularity of the name Olivia by ethnicity from 2011-2016")
+  kable(caption = "Popularity of the Name 'Olivia' by Ethnicity from 2011-2016") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 
 olivia
 ```
 
-| ethnicity                  | 2011 | 2012 | 2013 | 2014 | 2015 | 2016 |
-| :------------------------- | ---: | ---: | ---: | ---: | ---: | ---: |
-| white non hispanic         |    2 |    4 |    1 |    1 |    1 |    1 |
-| asian and pacific islander |    4 |    3 |    3 |    1 |    1 |    1 |
-| black non hispanic         |   10 |    8 |    6 |    8 |    4 |    8 |
-| hispanic                   |   18 |   22 |   22 |   16 |   16 |   13 |
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
 
-Popularity of the name Olivia by ethnicity from
-2011-2016
+<caption>
+
+Popularity of the Name ‘Olivia’ by Ethnicity from 2011-2016
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+ethnicity
+
+</th>
+
+<th style="text-align:right;">
+
+2011
+
+</th>
+
+<th style="text-align:right;">
+
+2012
+
+</th>
+
+<th style="text-align:right;">
+
+2013
+
+</th>
+
+<th style="text-align:right;">
+
+2014
+
+</th>
+
+<th style="text-align:right;">
+
+2015
+
+</th>
+
+<th style="text-align:right;">
+
+2016
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+white non hispanic
+
+</td>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+<td style="text-align:right;">
+
+4
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+asian and pacific islander
+
+</td>
+
+<td style="text-align:right;">
+
+4
+
+</td>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+black non
+hispanic
+
+</td>
+
+<td style="text-align:right;">
+
+10
+
+</td>
+
+<td style="text-align:right;">
+
+8
+
+</td>
+
+<td style="text-align:right;">
+
+6
+
+</td>
+
+<td style="text-align:right;">
+
+8
+
+</td>
+
+<td style="text-align:right;">
+
+4
+
+</td>
+
+<td style="text-align:right;">
+
+8
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+hispanic
+
+</td>
+
+<td style="text-align:right;">
+
+18
+
+</td>
+
+<td style="text-align:right;">
+
+22
+
+</td>
+
+<td style="text-align:right;">
+
+22
+
+</td>
+
+<td style="text-align:right;">
+
+16
+
+</td>
+
+<td style="text-align:right;">
+
+16
+
+</td>
+
+<td style="text-align:right;">
+
+13
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 ### The most popular male child’s name can be identified by filtering (`filter`) the “pop\_baby\_names” dateset by gender (“male”), and arranging (`arrange`) the datset by rank to see the name that is most popular. This name was Ethan.
 
@@ -415,20 +656,261 @@ ethan =
     names_from = "year_of_birth",
     values_from = "rank"
     ) %>%
-  kable(caption = "Popularity of the name Ethan by ethnicity from 2011-2016")
+  kable(caption = "Popularity of the Name 'Ethan' by Ethnicity from 2011-2016") %>%
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
 
 ethan
 ```
 
-| ethnicity                  | 2011 | 2012 | 2013 | 2014 | 2015 | 2016 |
-| :------------------------- | ---: | ---: | ---: | ---: | ---: | ---: |
-| asian and pacific islander |    1 |    2 |    2 |    2 |    2 |    1 |
-| black non hispanic         |    6 |    3 |    1 |    1 |    5 |    5 |
-| hispanic                   |    6 |    4 |    5 |    5 |    3 |    7 |
-| white non hispanic         |   26 |   21 |   23 |   18 |   19 |   20 |
+<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
 
-Popularity of the name Ethan by ethnicity from
-2011-2016
+<caption>
+
+Popularity of the Name ‘Ethan’ by Ethnicity from 2011-2016
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+ethnicity
+
+</th>
+
+<th style="text-align:right;">
+
+2011
+
+</th>
+
+<th style="text-align:right;">
+
+2012
+
+</th>
+
+<th style="text-align:right;">
+
+2013
+
+</th>
+
+<th style="text-align:right;">
+
+2014
+
+</th>
+
+<th style="text-align:right;">
+
+2015
+
+</th>
+
+<th style="text-align:right;">
+
+2016
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+asian and pacific islander
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+black non hispanic
+
+</td>
+
+<td style="text-align:right;">
+
+6
+
+</td>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+5
+
+</td>
+
+<td style="text-align:right;">
+
+5
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+hispanic
+
+</td>
+
+<td style="text-align:right;">
+
+6
+
+</td>
+
+<td style="text-align:right;">
+
+4
+
+</td>
+
+<td style="text-align:right;">
+
+5
+
+</td>
+
+<td style="text-align:right;">
+
+5
+
+</td>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+<td style="text-align:right;">
+
+7
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+white non
+hispanic
+
+</td>
+
+<td style="text-align:right;">
+
+26
+
+</td>
+
+<td style="text-align:right;">
+
+21
+
+</td>
+
+<td style="text-align:right;">
+
+23
+
+</td>
+
+<td style="text-align:right;">
+
+18
+
+</td>
+
+<td style="text-align:right;">
+
+19
+
+</td>
+
+<td style="text-align:right;">
+
+20
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 ### To produce a scatterplot of male, white non-hispanic children born in 2016, we need to first `filter` the dataset to screen for “male” gender, “2016” year, and “white non hispanic” ethnicity:
 
