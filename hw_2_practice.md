@@ -13,7 +13,7 @@ Kodiak Soled
 library(tidyverse)
 ```
 
-### Then, we can load the `readxl` package in order to import the Excel file data using `read_excel`, specify the sheet in the Excel file we want with `sheets`, and omit non-data entries by specifying the columns and rows we want to include with the `range` function. We can also clean up the names of the variables with the `janitor` function. Next, we can omit the rows that do not include dumpster-specific data by using `drop_na`. Lastly, we can round the number of sports balls to the nearest integer and convert the result to an integer variable using `as.integer`.
+### Then, we can load the `readxl` package in order to import the Excel file data using `read_excel`, specify the sheet in the Excel file we want with `sheets`, and omit non-data entries by specifying the columns and rows we want to include with the `range` function. We can also clean up the names of the variables with the `janitor::clean_names()` function. Next, we can omit the rows that do not include dumpster-specific data by using `drop_na`. Lastly, we can round the number of sports balls to the nearest integer and convert the result to an integer variable using `as.integer`.
 
 ``` r
 library(readxl)
@@ -45,7 +45,7 @@ mr_trash_wheel
 
 ## *Precipitation Data*
 
-### First, we can read (`read_excel`) and clean (`janitor`) the preciptation data for years 2017 and 2018. Again, we can omit the rows without the precipitation data by specifying the `range` of rows and columns to include. Lastly, we can add a variable year to each data set with the `mutate` function.
+### First, we can read (`read_excel`) and clean (`janitor::clean_names()`) the preciptation data for years 2017 and 2018. Again, we can omit the rows without the precipitation data by specifying the `range` of rows and columns to include. Lastly, we can add a variable year to each data set with the `mutate` function.
 
 ``` r
 precip_data_2018 = 
@@ -126,15 +126,28 @@ precip_data
 
 ## *Description*
 
-### The Mr. Trash Wheel dataset contains 344 observations and 14 variables for a total of 4816 cells. The 14 variables include: dumpster, month, year, date, weight (tons), volume (cubic yards), etc. from May 2014 until June 2019. The median number of sports balls in a dumpster in 2017 was 8.
+### Mr. Trash Wheel
 
-### The combined precipition dataset contains the total preciptation per month for the years 2017 and 2018. It contains 24 observations and 3 variables (month, year, and total precipitation) for a total of 72 cells. In 2018 the total precipitation was 70.33.
+  - The Mr. Trash Wheel dataset contains 344 observations and 14
+    variables for a total of 4816 cells.
+  - The 14 variables include: dumpster, month, year, date, weight
+    (tons), volume (cubic yards), etc. from May 2014 until June 2019.
+  - The median number of sports balls in a dumpster in 2017 was 8.
+
+### Precipitation
+
+  - The combined precipition dataset contains the total preciptation per
+    month for the years 2017 and 2018.
+  - It contains 24 observations and 3 variables (month, year, and total
+    precipitation) for a total of 72 cells.
+  - In 2018 the total precipitation was
+70.33.
 
 # *Problem 2*
 
 ## *FiveThiryEight*
 
-### First, we can import (`read_csv`) and clean (`janitor`) the three datasets: pols-month.csv, unemployment.csv, and snp.csv. Then, we can use the `separate` function to change the “date” variable into three varaibles (“year”, “month”, and “day”) for the pols-month and snp datasets (*note: this isn’t necessary for the unemployment dataset as it was already seperated by date*).
+### First, we can import (`read_csv`) and clean (`janitor::clean_names()`) the three datasets: pols-month.csv, unemployment.csv, and snp.csv. Then, we can use the `separate` function to change the “date” variable into three varaibles (“year”, “month”, and “day”) for the pols-month and snp datasets (*note: this isn’t necessary for the unemployment dataset as it was already seperated by date*).
 
 ### Specifically for the pols-month data, we can replace the month number with the abbreviated month name (to match the unemployment dataset that contains abbreviated month names) with `month.abb` under the `mutate` function, after specifying the month as an integer (`as.integer`). We also can create a new variable “president” under `mutate` with the `if_else` function and remove the “prez\_gap”, “prez\_day”, and “day” variables with `select` to clean up the dataset.
 
@@ -142,7 +155,7 @@ precip_data
 
 ### The unemployment data specifically needed to be reorganized from a “wide” to “long” format to match the first two datasets. The `pivot_longer` function allows us to do this. We also needed to make“year” into a character vector which we can do with `as.character` under the `mutate` function.
 
-\#\#\#The cleaned datasets look like the following:
+### The cleaned datasets look like the following:
 
 ``` r
 pols_month =
@@ -266,22 +279,35 @@ pol_snp_unemployment_data
 
 ### 
 
-  - The pols-month dataset contained 7398 cells (822 observations and 9
-    variables) about the republican and democrat president, govenor,
+  - The *pols-month dataset* contained 7398 cells (822 observations and
+    9 variables) about the republican and democrat president, govenor,
     senator, and house representative from 1947-2015.
-  - The snp dataset contained 2361 cells (787 observations and 3
+  - The *snp dataset* contained 2361 cells (787 observations and 3
     varaibles) about the closing rate of the snp from 1950-2015.
-  - The unemployment dataset contained 2448 cells (816 observations and
-    3 variables) about the umployment rate by month from
-1948-2015.
-
-### The combined dataset contains data from 1947 to 2015 on the variables: month, year, president, unemployment rate, the closing rate for the snp, and the govenor, senator, house of representatives of the democratic and republican parties. It is contains 822 rows and 11 columns for a total of 9042 observations.
+  - The *unemployment dataset* contained 2448 cells (816 observations
+    and 3 variables) about the umployment rate by month from 1948-2015.
+  - The *combined dataset* now contains data from 1947 to 2015 on the
+    variables: month, year, president, unemployment rate, the closing
+    rate for the snp, and the govenor, senator, house of representatives
+    of the democratic and republican parties. It is contains 822
+    observations and 11 variables for a total of 9042
+cells.
 
 # *Problem \#3*
 
 ## *NYC Open*
 
-### First we need to load (`read_csv`) the dataset pop\_baby\_names and tidy it. This includes cleaning the variable names (`janitor`), changing all the case structure of string variables to lower case (`str_to_lower`), making the string variables under ethnicity similar (e.g., making “asian and paci” and “asian and pacific islander” have the same name through the `replace` function), and deduplicating the dataset (`unique`).
+### First, we need to load (`read_csv`) the dataset pop\_baby\_names and tidy it. This includes:
+
+  - Cleaning the variable names (`janitor::clean_names()`)
+  - Changing all the case structure of string variables to lower case
+    (`str_to_lower`)
+  - Making the string variables under ethnicity similar (e.g., making
+    “asian and paci” and “asian and pacific islander” have the same
+    name through the `replace` function)
+  - Deduplicating the dataset (`unique`)
+
+<!-- end list -->
 
 ``` r
 pop_baby_names =
@@ -315,7 +341,14 @@ pop_baby_names
     ## 10          2016 female asian and pacific isl… hannah              56     8
     ## # … with 12,171 more rows
 
-### Then we can create a reader-friendly table that displays the popularity of the name Olivia from 2011-2016. To do this, we can perform the same cleaning as above, but we will also need to `filter` for the name Olivia, reorganize the variable order using `select` then `arrange`, and then `pivot_wider` the dataframe so that we can produce a table of the popularity of the name Olivia by ethnicity across time.
+### Then, we can create a reader-friendly table that displays the popularity of the name Olivia from 2011-2016. To do this, we can perform the same cleaning as above, but we will also need to:
+
+  - `filter` for the name Olivia
+  - reorganize the variable order using `select` then `arrange`
+  - `pivot_wider` the dataframe so that we can produce a reader-friendly
+    table of the popularity of the name Olivia by ethnicity across time
+
+<!-- end list -->
 
 ``` r
 olivia =
@@ -349,7 +382,7 @@ olivia
     ## 3 black non hispanic             10      8      6      8      4      8
     ## 4 hispanic                       18     22     22     16     16     13
 
-### The most popular male child’s name can be identified by filtering pop\_baby\_names by gender, and seeing the name that ranked \#1. This was Ethan. Then, the same produce can be repeated from the example above to produce a simar table of the popularity of the name Ethan by ethnicity across time.
+### The most popular male child’s name can be identified by filtering (`filter`) the “pop\_baby\_names” dateset by gender (“male”), and viewing (`view`) the datset to see the name that ranked \#1. This name was Ethan. Then, the same procedure can be repeated from the example above to produce a simar table of the popularity of the name Ethan by ethnicity across time:
 
 ``` r
 ethan =
@@ -383,7 +416,7 @@ ethan
     ## 3 hispanic                        6      4      5      5      3      7
     ## 4 white non hispanic             26     21     23     18     19     20
 
-### To produce a scatterplot of male, white non-hispanic children born in 2016, we need to first `filter` the dataset to screen for male gender, 2016 year, and white non hispanic ethnicity. Then we can create a scatterplot using `ggplot` of this new subset of the data that shows the number of children with a name against the rank in popularity of that name:
+### To produce a scatterplot of male, white non-hispanic children born in 2016, we need to first `filter` the dataset to screen for “male” gender, “2016” year, and “white non hispanic” ethnicity. Then we can create a scatterplot using `ggplot` of this new subset of the data that shows the number of children with a name against the rank in popularity of that name:
 
 ``` r
 library(ggridges)
