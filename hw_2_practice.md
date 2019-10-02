@@ -97,7 +97,7 @@ precip_data_2017
     ## 11    11  0.11  2017
     ## 12    12  0.94  2017
 
-### Finally, we can combine the two datasets with the `full join` function since both datasets have the same variables in each respective dataframe. We can also convert the month variable from a numeric (1-12) to a character variable (january-december) so that the month names appear using `month.name`:
+### Finally, we can combine the two datasets with the `bind_rows` function to stack the two datasets ontop of one another to create a tidy dataset. We can also convert the month variable from a numeric (1-12) to a character variable (january-december) so that the month names appear using `month.name`:
 
 ``` r
 precip_data = 
@@ -128,19 +128,21 @@ precip_data
 
 ### The Mr. Trash Wheel dataset contains 344 observations and 14 variables for a total of 4816 cells. The 14 variables include: dumpster, month, year, date, weight (tons), volume (cubic yards), etc. from May 2014 until June 2019. The median number of sports balls in a dumpster in 2017 was 8.
 
-### The combined precipition dataset contains the total preciptation per month for the years 2017 and 2018. It contains 24 observations and 3 variables (month, year, and precipitation amount) for a total of 72 cells. In 2018 the total precipitation was 70.33.
+### The combined precipition dataset contains the total preciptation per month for the years 2017 and 2018. It contains 24 observations and 3 variables (month, year, and total precipitation) for a total of 72 cells. In 2018 the total precipitation was 70.33.
 
 # *Problem 2*
 
 ## *FiveThiryEight*
 
-### First, we can import (`read_csv`) and clean (`janitor`) the three datasets: pols-month.csv, unemployment.csv, and snp.csv. Then, we can use the `separate` function to change the “date” variable into three varaibles: “year”, “month”, and “day” (*note: this isn’t necessary for the unemployment dataset as it was already seperated by date*).
+### First, we can import (`read_csv`) and clean (`janitor`) the three datasets: pols-month.csv, unemployment.csv, and snp.csv. Then, we can use the `separate` function to change the “date” variable into three varaibles (“year”, “month”, and “day”) for the pols-month and snp datasets (*note: this isn’t necessary for the unemployment dataset as it was already seperated by date*).
 
-### For the pols-month data, I replaced the month number with the abbreviated month name to match the unemployment dataset with `month.abb` under the `mutate` function (specifying the month as `as.integer` allowed us to do this). We also can create a new variable “president” under `mutate` with the `if_else` function and remove the prez\_gap, prez\_day, and day variable with `select` to clean up the dataset.
+### Specifically for the pols-month data, we can replace the month number with the abbreviated month name (to match the unemployment dataset that contains abbreviated month names) with `month.abb` under the `mutate` function, after specifying the month as an integer (`as.integer`). We also can create a new variable “president” under `mutate` with the `if_else` function and remove the “prez\_gap”, “prez\_day”, and “day” variables with `select` to clean up the dataset.
 
-### We can then clean the snp data to look similar to the pols-month data by using many of the same functions as above (e.g., deleting the day variable with `select`, changing month as a number to a name with `month.abb` under the `mutate` function, etc.)
+### We can then specifically clean the snp data to look similar to the pols-month data by using many of the same functions as above (e.g., deleting the “day” variable with `select`, changing month as a number to a name with `month.abb` under the `mutate` function, etc.)
 
-### The unemployment data needed to be reorganized from a “wide” to “long” format to match the first two datasets. The `pivot_longer` function allows us to do this. To match the other two datasets, we also needed to make the year a character vector which we did with the `mutate` and `as.character` functions. The cleaned datasets look like the following:
+### The unemployment data specifically needed to be reorganized from a “wide” to “long” format to match the first two datasets. The `pivot_longer` function allows us to do this. We also needed to make“year” into a character vector which we can do with `as.character` under the `mutate` function.
+
+\#\#\#The cleaned datasets look like the following:
 
 ``` r
 pols_month =
@@ -231,7 +233,7 @@ unemployment
     ## 10 1948  oct                 3.7
     ## # … with 806 more rows
 
-### Now we are readt to combine the three datasets. We can first merge the pols-month and snp datasets with the `left_join` function by the shared catagory of “month” and “year”. Then we can merge this new dataset with the final dataset unemployment in the same fashion:
+### Now we are ready to combine the three datasets. We can first merge the pols-month and snp datasets with the `left_join` function and specifying the merge by the shared catagories of “month” and “year”. Then, we can merge this new dataset with the third dataset unemployment in the same fashion:
 
 ``` r
 pol_snp_data = 
@@ -260,7 +262,9 @@ pol_snp_unemployment_data
     ## # … with 812 more rows, and 3 more variables: gov_dem <dbl>,
     ## #   sen_dem <dbl>, rep_dem <dbl>
 
-### The pols-month dataset contained 7398 observations (822 rows and 9 columns) about the republican and democrat president, govenor, senator, and house representative from 1947-2015. The snp dataset contained 2361 observations (787 rows and 3 columns) about the closing rate of the snp from 1950-2015. The unemployment dataset contained 2448 observations (816 rows and 3 columns) about the umployment rate by month from 1948-2015.
+## *Description*
+
+### The pols-month dataset contained 7398 cells (822 observations and 9 variables) about the republican and democrat president, govenor, senator, and house representative from 1947-2015. The snp dataset contained 2361 cells (787 observations and 3 varaibles) about the closing rate of the snp from 1950-2015. The unemployment dataset contained 2448 cells (816 observations and 3 variables) about the umployment rate by month from 1948-2015.
 
 ### The combined dataset contains data from 1947 to 2015 on the variables: month, year, president, unemployment rate, the closing rate for the snp, and the govenor, senator, house of representatives of the democratic and republican parties. It is contains 822 rows and 11 columns for a total of 9042 observations.
 
