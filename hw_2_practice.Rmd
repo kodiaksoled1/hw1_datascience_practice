@@ -127,7 +127,10 @@ pol_snp_unemployment_data
 
 ## _Description_
 
-### The pols-month dataset contained `r nrow(pols_month)*ncol(pols_month)` cells (`r nrow(pols_month)` observations and `r ncol(pols_month)` variables) about the republican and democrat president, govenor, senator, and house representative from 1947-2015. The snp dataset contained `r nrow(snp)*ncol(snp)` cells (`r nrow(snp)` observations and `r ncol(snp)` varaibles) about the closing rate of the snp from 1950-2015. The unemployment dataset contained `r nrow(unemployment)*ncol(unemployment)` cells (`r nrow(unemployment)` observations and `r ncol(unemployment)` variables) about the umployment rate by month from 1948-2015.
+### 
+* The pols-month dataset contained `r nrow(pols_month)*ncol(pols_month)` cells (`r nrow(pols_month)` observations and `r ncol(pols_month)` variables) about the republican and democrat president, govenor, senator, and house representative from 1947-2015. 
+* The snp dataset contained `r nrow(snp)*ncol(snp)` cells (`r nrow(snp)` observations and `r ncol(snp)` varaibles) about the closing rate of the snp from 1950-2015. 
+* The unemployment dataset contained `r nrow(unemployment)*ncol(unemployment)` cells (`r nrow(unemployment)` observations and `r ncol(unemployment)` variables) about the umployment rate by month from 1948-2015.
 
 ### The combined dataset contains data from 1947 to 2015 on the variables: month, year, president, unemployment rate, the closing rate for the snp, and the govenor, senator, house of representatives of the democratic and republican parties. It is contains `r nrow(pol_snp_unemployment_data)` rows and `r ncol(pol_snp_unemployment_data)` columns for a total of `r nrow(pol_snp_unemployment_data)*ncol(pol_snp_unemployment_data)` observations. 
 

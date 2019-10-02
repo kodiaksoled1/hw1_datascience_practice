@@ -264,7 +264,16 @@ pol_snp_unemployment_data
 
 ## *Description*
 
-### The pols-month dataset contained 7398 cells (822 observations and 9 variables) about the republican and democrat president, govenor, senator, and house representative from 1947-2015. The snp dataset contained 2361 cells (787 observations and 3 varaibles) about the closing rate of the snp from 1950-2015. The unemployment dataset contained 2448 cells (816 observations and 3 variables) about the umployment rate by month from 1948-2015.
+### 
+
+  - The pols-month dataset contained 7398 cells (822 observations and 9
+    variables) about the republican and democrat president, govenor,
+    senator, and house representative from 1947-2015.
+  - The snp dataset contained 2361 cells (787 observations and 3
+    varaibles) about the closing rate of the snp from 1950-2015.
+  - The unemployment dataset contained 2448 cells (816 observations and
+    3 variables) about the umployment rate by month from
+1948-2015.
 
 ### The combined dataset contains data from 1947 to 2015 on the variables: month, year, president, unemployment rate, the closing rate for the snp, and the govenor, senator, house of representatives of the democratic and republican parties. It is contains 822 rows and 11 columns for a total of 9042 observations.
 
