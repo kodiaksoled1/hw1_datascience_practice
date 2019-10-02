@@ -126,15 +126,15 @@ precip_data
 
 ## *Description*
 
-### The Mr. Trash Wheel dataset contains 344 rows/observations and 14 columns/variables for a total of 4816 cells. THe 14 variables include: dumpster, month, year, date, weight (tons), volume (cubic yards), etc. from May 2014 until June 2019. The median number of sports balls in a dumpster in 2017 was 8.
+### The Mr. Trash Wheel dataset contains 344 observations and 14 variables for a total of 4816 cells. The 14 variables include: dumpster, month, year, date, weight (tons), volume (cubic yards), etc. from May 2014 until June 2019. The median number of sports balls in a dumpster in 2017 was 8.
 
-### The combined precipition dataset contains the total preciptation per month for the years 2017 and 2018. It contains 24 rows/observations and 3 columns/variables for a total of 72 cells. In 2018 the total precipitation was 70.33.
+### The combined precipition dataset contains the total preciptation per month for the years 2017 and 2018. It contains 24 observations and 3 variables (month, year, and precipitation amount) for a total of 72 cells. In 2018 the total precipitation was 70.33.
 
 # *Problem 2*
 
 ## *FiveThiryEight*
 
-### First we import (`read_csv`) and clean (`janitor`) the datasets: pols-month.csv, unemployment.csv, and snp.csv. Then, we can use the `separate` function to change the “date” variable into “year”, “month”, and “day” (note this isn’t necessary for unemployment as it was already seperated).
+### First, we can import (`read_csv`) and clean (`janitor`) the three datasets: pols-month.csv, unemployment.csv, and snp.csv. Then, we can use the `separate` function to change the “date” variable into three varaibles: “year”, “month”, and “day” (*note: this isn’t necessary for the unemployment dataset as it was already seperated by date*).
 
 ### For the pols-month data, I replaced the month number with the abbreviated month name to match the unemployment dataset with `month.abb` under the `mutate` function (specifying the month as `as.integer` allowed us to do this). We also can create a new variable “president” under `mutate` with the `if_else` function and remove the prez\_gap, prez\_day, and day variable with `select` to clean up the dataset.
 

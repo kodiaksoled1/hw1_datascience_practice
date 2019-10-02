@@ -56,15 +56,15 @@ precip_data
 ```
 
 ## _Description_
-### The Mr. Trash Wheel dataset contains `r nrow(mr_trash_wheel)` rows/observations and `r ncol(mr_trash_wheel)` columns/variables for a total of `r nrow(mr_trash_wheel)*ncol(mr_trash_wheel)` cells. THe `r length(mr_trash_wheel)` variables include: dumpster, month, year, date, weight (tons), volume (cubic yards), etc. from May 2014 until June 2019. The median number of sports balls in a dumpster in 2017 was `r median(pull(mr_trash_wheel %>% filter(year == "2017"), sports_balls))`.
+### The Mr. Trash Wheel dataset contains `r nrow(mr_trash_wheel)` observations and `r ncol(mr_trash_wheel)` variables for a total of `r nrow(mr_trash_wheel)*ncol(mr_trash_wheel)` cells. The `r length(mr_trash_wheel)` variables include: dumpster, month, year, date, weight (tons), volume (cubic yards), etc. from May 2014 until June 2019. The median number of sports balls in a dumpster in 2017 was `r median(pull(mr_trash_wheel %>% filter(year == "2017"), sports_balls))`.
 
-### The combined precipition dataset contains the total preciptation per month for the years 2017 and 2018. It contains `r nrow(precip_data)` rows/observations and `r ncol(precip_data)` columns/variables for a total of `r nrow(precip_data)*ncol(precip_data)` cells. In 2018 the total precipitation was `r sum(pull(precip_data %>% filter(year == "2018"), total))`. 
+### The combined precipition dataset contains the total preciptation per month for the years 2017 and 2018. It contains `r nrow(precip_data)` observations and `r ncol(precip_data)` variables (month, year, and precipitation amount) for a total of `r nrow(precip_data)*ncol(precip_data)` cells. In 2018 the total precipitation was `r sum(pull(precip_data %>% filter(year == "2018"), total))`. 
 
 # *Problem 2* 
 
 ## _FiveThiryEight_
 
-### First we import (`read_csv`) and clean (`janitor`) the datasets: pols-month.csv, unemployment.csv, and snp.csv. Then, we can use the `separate` function to change the "date" variable into "year", "month", and "day" (note this isn't necessary for unemployment as it was already seperated). 
+### First, we can import (`read_csv`) and clean (`janitor`) the three datasets: pols-month.csv, unemployment.csv, and snp.csv. Then, we can use the `separate` function to change the "date" variable into three varaibles: "year", "month", and "day" (_note: this isn't necessary for the unemployment dataset as it was already seperated by date_). 
 
 ### For the pols-month data, I replaced the month number with the abbreviated month name to match the unemployment dataset with `month.abb` under the `mutate` function (specifying the month as `as.integer` allowed us to do this). We also can create a new variable "president" under `mutate` with the `if_else` function and remove the prez_gap, prez_day, and day variable with `select` to clean up the dataset. 
 
