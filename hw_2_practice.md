@@ -347,6 +347,9 @@ pop_baby_names
   - reorganize the variable order using `select` then `arrange`
   - `pivot_wider` the dataframe so that we can produce a reader-friendly
     table of the popularity of the name Olivia by ethnicity across time
+  - use `kable` from the `knitr` package to create a reader-friendly
+    table with a title and `kable_stlying` from the `kableExtra` package
+    to format the table
 
 <!-- end list -->
 
@@ -363,12 +366,12 @@ olivia =
     values_from = "rank"
     ) %>%
   kable(caption = "Popularity of the Name 'Olivia' by Ethnicity from 2011-2016") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+  kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
 
 olivia
 ```
 
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
 
 <caption>
 
@@ -656,14 +659,14 @@ ethan =
     names_from = "year_of_birth",
     values_from = "rank"
     ) %>%
-  kable(caption = "Popularity of the Name 'Ethan' by Ethnicity from 2011-2016") %>%
-    kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+  kable(caption = "Popularity of the Name 'Ethan' by Ethnicity from 2011-2016") %>% 
+  kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
 
 
 ethan
 ```
 
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
 
 <caption>
 

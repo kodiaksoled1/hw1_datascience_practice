@@ -172,6 +172,7 @@ pop_baby_names
 * `filter` for the name Olivia
 * reorganize the variable order using `select` then `arrange`
 * `pivot_wider` the dataframe so that we can produce a reader-friendly table of the popularity of the name Olivia by ethnicity across time
+* use `kable` from the `knitr` package to create a reader-friendly table with a title and `kable_stlying` from the `kableExtra` package to format the table
 
 ```{r message = FALSE}
 library(kableExtra)
@@ -186,7 +187,7 @@ olivia =
     values_from = "rank"
     ) %>%
   kable(caption = "Popularity of the Name 'Olivia' by Ethnicity from 2011-2016") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+  kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
 
 olivia
 ```
@@ -214,8 +215,8 @@ ethan =
     names_from = "year_of_birth",
     values_from = "rank"
     ) %>%
-  kable(caption = "Popularity of the Name 'Ethan' by Ethnicity from 2011-2016") %>%
-    kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+  kable(caption = "Popularity of the Name 'Ethan' by Ethnicity from 2011-2016") %>% 
+  kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
 
 
 ethan
