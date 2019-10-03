@@ -5,22 +5,16 @@ date: "9/28/2019"
 output: github_document
 always_allow_html: yes
 ---
-_Note to TAs: you may need to_ `install.packages(kableExtra)` _to run my code for problem #3_
+_Note to TAs: you may need to_ `install.packages(kableExtra)` _to run my code for problem #3._
 
 # *Problem #1*
 
 ## _Mr. Trash Wheel_
 
-### First, we will need to load the tidyverse package for some of the datacleaning we will perform:
-
-```{r message = FALSE}
-library(tidyverse)
-```
-
-### Then, we can load the `readxl` package in order to import the Excel file data: 
-
+### First, we can load the `readxl` package to import the Excel file data and we can load the `tidyverse` package for some of the datacleaning we will need to perform: 
 ```{r}
 library(readxl)
+library(tidyverse)
 ```
 
 ### Now we can read (`read_excel`) and clean the dataset by: 
@@ -74,8 +68,9 @@ precip_data
 ## _Description_
 ### Mr. Trash Wheel 
 
-* The Mr. Trash Wheel dataset contains `r nrow(mr_trash_wheel)` observations and `r ncol(mr_trash_wheel)` variables for a total of `r nrow(mr_trash_wheel)*ncol(mr_trash_wheel)` cells. 
-* The `r length(mr_trash_wheel)` variables include: dumpster, month, year, date, weight (tons), volume (cubic yards), etc. from May 2014 until June 2019. 
+* The Mr. Trash Wheel dataset contains data from May 2014 until June 2019. 
+* The dataset includes `r nrow(mr_trash_wheel)` observations and `r ncol(mr_trash_wheel)` variables for a total of `r nrow(mr_trash_wheel)*ncol(mr_trash_wheel)` cells. 
+* The `r length(mr_trash_wheel)` variables include: dumpster, month, year, date, weight (tons), volume (cubic yards), etc. 
 * The median number of sports balls in a dumpster in 2017 was `r median(pull(mr_trash_wheel %>% filter(year == "2017"), sports_balls))`.
 
 ### Precipitation
@@ -153,7 +148,7 @@ pol_snp_unemployment_data
 
 ### 
 * The *pols-month dataset* contained `r nrow(pols_month)*ncol(pols_month)` cells (`r nrow(pols_month)` observations and `r ncol(pols_month)` variables) about the republican and democrat president, govenor, senator, and house representative from 1947-2015. 
-* The *snp dataset* contained `r nrow(snp)*ncol(snp)` cells (`r nrow(snp)` observations and `r ncol(snp)` varaibles) about the closing rate of the snp from 1950-2015. 
+* The *snp dataset* contained `r nrow(snp)*ncol(snp)` cells (`r nrow(snp)` observations and `r ncol(snp)` varaibles) about the average annual return rate of the S&P 500 from 1950-2015. 
 * The *unemployment dataset* contained `r nrow(unemployment)*ncol(unemployment)` cells (`r nrow(unemployment)` observations and `r ncol(unemployment)` variables) about the umployment rate by month from 1948-2015.
 * The *combined dataset* now contains data from 1947 to 2015 on the variables: month, year, president, unemployment rate, the closing rate for the snp, and the govenor, senator, house of representatives of the democratic and republican parties. It is contains `r nrow(pol_snp_unemployment_data)` observations and `r ncol(pol_snp_unemployment_data)` variables for a total of `r nrow(pol_snp_unemployment_data)*ncol(pol_snp_unemployment_data)` cells. 
 
@@ -172,7 +167,7 @@ pol_snp_unemployment_data
 pop_baby_names =
   read_csv("./data/Popular_Baby_Names.csv") %>%
   janitor::clean_names() %>%
-  rename("year" = year_of_birth, "name" = childs_first_name) %>%
+  rename(year = year_of_birth, name = childs_first_name) %>%
   mutate(
     gender = str_to_lower(gender),
     ethnicity = str_to_lower(ethnicity), 
@@ -194,7 +189,6 @@ pop_baby_names
 
 ```{r message = FALSE}
 library(kableExtra)
-library(knitr)
 olivia = 
   pop_baby_names %>%
   filter(name == "olivia") %>%
@@ -204,7 +198,7 @@ olivia =
     names_from = "year",
     values_from = "rank"
     ) %>%
-  kable(caption = "Popularity of the Name 'Olivia' by Ethnicity from 2011-2016") %>%
+  knitr::kable(caption = "Popularity of the Name 'Olivia' by Ethnicity from 2011-2016") %>%
   kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
 
 olivia
@@ -233,8 +227,8 @@ ethan =
     names_from = "year",
     values_from = "rank"
     ) %>%
-  kable(caption = "Popularity of the Name 'Ethan' by Ethnicity from 2011-2016") %>% 
-  kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
+  knitr::kable(caption = "Popularity of the Name 'Ethan' by Ethnicity from 2011-2016") %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
 
 
 ethan

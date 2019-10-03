@@ -5,23 +5,29 @@ Kodiak Soled
 
 *Note to TAs: you may need to* `install.packages(kableExtra)` *to run my
 code for problem
-\#3*
+\#3.*
 
 # *Problem \#1*
 
 ## *Mr. Trash Wheel*
 
-### First, we will need to load the tidyverse package for some of the datacleaning we will perform:
-
-``` r
-library(tidyverse)
-```
-
-### Then, we can load the `readxl` package in order to import the Excel file data:
+### First, we can load the `readxl` package to import the Excel file data and we can load the `tidyverse` package for some of the datacleaning we will need to perform:
 
 ``` r
 library(readxl)
+library(tidyverse)
 ```
+
+    ## ── Attaching packages ──────────────────── tidyverse 1.2.1 ──
+
+    ## ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
+    ## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
+    ## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
+    ## ✔ readr   1.3.1     ✔ forcats 0.4.0
+
+    ## ── Conflicts ─────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
 
 ### Now we can read (`read_excel`) and clean the dataset by:
 
@@ -149,10 +155,12 @@ precip_data
 
 ### Mr. Trash Wheel
 
-  - The Mr. Trash Wheel dataset contains 344 observations and 14
-    variables for a total of 4816 cells.
+  - The Mr. Trash Wheel dataset contains data from May 2014 until June
+    2019.
+  - The dataset includes 344 observations and 14 variables for a total
+    of 4816 cells.
   - The 14 variables include: dumpster, month, year, date, weight
-    (tons), volume (cubic yards), etc. from May 2014 until June 2019.
+    (tons), volume (cubic yards), etc.
   - The median number of sports balls in a dumpster in 2017 was 8.
 
 ### Precipitation
@@ -318,7 +326,8 @@ pol_snp_unemployment_data
     9 variables) about the republican and democrat president, govenor,
     senator, and house representative from 1947-2015.
   - The *snp dataset* contained 2361 cells (787 observations and 3
-    varaibles) about the closing rate of the snp from 1950-2015.
+    varaibles) about the average annual return rate of the S\&P 500 from
+    1950-2015.
   - The *unemployment dataset* contained 2448 cells (816 observations
     and 3 variables) about the umployment rate by month from 1948-2015.
   - The *combined dataset* now contains data from 1947 to 2015 on the
@@ -349,7 +358,7 @@ cells.
 pop_baby_names =
   read_csv("./data/Popular_Baby_Names.csv") %>%
   janitor::clean_names() %>%
-  rename("year" = year_of_birth, "name" = childs_first_name) %>%
+  rename(year = year_of_birth, name = childs_first_name) %>%
   mutate(
     gender = str_to_lower(gender),
     ethnicity = str_to_lower(ethnicity), 
@@ -392,7 +401,6 @@ pop_baby_names
 
 ``` r
 library(kableExtra)
-library(knitr)
 olivia = 
   pop_baby_names %>%
   filter(name == "olivia") %>%
@@ -402,7 +410,7 @@ olivia =
     names_from = "year",
     values_from = "rank"
     ) %>%
-  kable(caption = "Popularity of the Name 'Olivia' by Ethnicity from 2011-2016") %>%
+  knitr::kable(caption = "Popularity of the Name 'Olivia' by Ethnicity from 2011-2016") %>%
   kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
 
 olivia
@@ -696,8 +704,8 @@ ethan =
     names_from = "year",
     values_from = "rank"
     ) %>%
-  kable(caption = "Popularity of the Name 'Ethan' by Ethnicity from 2011-2016") %>% 
-  kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
+  knitr::kable(caption = "Popularity of the Name 'Ethan' by Ethnicity from 2011-2016") %>% 
+  kableExtra::kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
 
 
 ethan
@@ -1001,4 +1009,4 @@ male_names =
 male_names
 ```
 
-![](hw_2_practice_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](hw_2_practice_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
