@@ -70,7 +70,7 @@ precip_data
 
 * The Mr. Trash Wheel dataset contains data from May 2014 until June 2019. 
 * The dataset includes `r nrow(mr_trash_wheel)` observations and `r ncol(mr_trash_wheel)` variables for a total of `r nrow(mr_trash_wheel)*ncol(mr_trash_wheel)` cells. 
-* The `r length(mr_trash_wheel)` variables include: dumpster, month, year, date, weight (tons), volume (cubic yards), etc. 
+* The `r length(mr_trash_wheel)` variables include: dumpster, month, year, date, weight, volume, etc. 
 * The median number of sports balls in a dumpster in 2017 was `r median(pull(mr_trash_wheel %>% filter(year == "2017"), sports_balls))`.
 
 ### Precipitation
