@@ -1,0 +1,164 @@
+---
+title: "p8105_hw3_practice"
+author: "Kodiak Soled"
+date: "10/4/2019"
+output: github_document
+always_allow_html: yes
+---
+
+_Note to TAs: you may need to_ `install.packages(kableExtra)` _to run my code for problem #3._
+
+###Setting up the document:
+
+```{r}
+library(tidyverse) #first load packages you want... 
+library(viridis)
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = FALSE,
+	fig.width = 8, 
+  fig.height = 6,
+  out.width = "90%"
+)
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+
+scale_fill_discrete = scale_fill_viridis_d
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+```
+
+# Problem #1 
+
+## Instacart Dataset
+
+### We first need to read in and tidy the instacart dataset: 
+
+```{r}
+library(p8105.datasets)
+data("instacart")
+
+cleaned_instacart = 
+  instacart %>%
+  janitor::clean_names() %>%
+  mutate(
+    product_name = str_to_lower(product_name)
+  )
+```
+
+### Description 
+* There are `r nrow(instacart)` observations and `r ncol(instacart)` variables in the Instacart dataset. 
+* Some key variables include the order and product identifier, the name of the product, the name and identifier of the department and aisle, and several variables that include information about the ordering of the product. 
+* For example, Organic Hass Avocados's product identifier is 47209. It is in the fresh fruit aisle (identifier: 24) which is part of the produce department (identifier: 4).
+
+## Answering Problem 1 Questions:
+
+### Determing the number of aisles and which aisles most items are ordered from: 
+
+```{r}
+aisle = 
+  cleaned_instacart %>% 
+  group_by(aisle) %>%
+  count() %>%
+  arrange(desc(n))
+
+aisle
+```
+
+* There are `r nrow(aisle)` aisles in this dataset. The most orders are from the fresh vegetables and fresh fruits aisles.
+
+## Here is a scatterplot that shows the number of items ordered in each aisle for aisles with more than 10,000 items ordered:
+
+```{r}
+aisle %>%
+  filter(n > 10000) %>%
+  ggplot(aes(x = n, y = aisle)) + 
+  geom_point() +
+  labs(
+    title = "Number of Items Ordered per Aisles (>10,000)",
+    x = "Number of Items Ordered",
+    y = "Aisle Name", 
+    caption = "Data from the Instacart Dataset"
+    )
+```
+
+## Here is a table with the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”: 
+
+```{r}
+library(kableExtra)
+baking_ingredients = 
+  cleaned_instacart %>%
+  filter(aisle == "baking ingredients") %>%
+  group_by(product_name) %>%
+  count() %>%
+  arrange(desc(n)) %>%
+  filter(n > 330) %>%
+  rename(number_times_item_ordered = n) %>%
+  knitr::kable(caption = "Three most Popular Items in the Baking Ingredients Aisle") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
+
+baking_ingredients
+
+dog_food_care = 
+  cleaned_instacart %>%
+  filter(aisle == "dog food care") %>%
+  group_by(product_name) %>%
+  count() %>%
+  arrange(desc(n)) %>%
+  filter(n > 25) %>%
+  rename(number_times_item_ordered = n) %>%
+  knitr::kable(caption = "Three most Popular Items in the Dog Food Care Aisle") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
+
+dog_food_care
+
+packaged_vegetables_fruits = 
+  cleaned_instacart %>%
+  filter(aisle == "packaged vegetables fruits") %>%
+  group_by(product_name) %>%
+  count() %>%
+  arrange(desc(n)) %>%
+  filter(n > 4900) %>%
+  rename(number_times_item_ordered = n) %>%
+  knitr::kable(caption = "Three most Popular Items in the Packaged Vegetables Fruits Aisle") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
+
+packaged_vegetables_fruits
+```
+
+### Here is a table of the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week: 
+
+```{r}
+pink_lady_apples = 
+  cleaned_instacart %>%
+  filter(product_name == "pink lady apples")
+
+coffee_ice_cream = 
+  cleaned_instacart %>%
+  filter(product_name == "coffee ice cream")
+
+apples_and_ice_cream =
+  bind_rows(pink_lady_apples, coffee_ice_cream) %>%
+  select(product_name, order_hour_of_day, order_dow) %>%
+  group_by(product_name, order_dow) %>%
+  summarize(count = n()) %>%
+  arrange(order_dow) %>%
+  rename(day_of_week = order_dow) %>%
+  pivot_wider(
+    names_from = "product_name",
+    values_from = "count"
+  ) %>%
+   knitr::kable(caption = "Mean Hour of Day Pink Lady Apples and Coffee Ice Cream is Ordered Each Day of Week") %>% kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
+
+apples_and_ice_cream
+```
+
+# Problem 2
+
+## BRFSS Dataset
