@@ -2136,7 +2136,7 @@ playing_hour_accel_data =
     y = "Density",
     caption = "Data from the Accelerometer Dataset")
 
-playing_hour_accel_data =
+playing_violin_accel_data =
   hour_accel_data %>%
   pivot_longer(
     cols = starts_with("hour_"),
@@ -2156,5 +2156,24 @@ playing_hour_accel_data
 ```
 
 <img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-18-1.png" width="90%" />
+
+``` r
+playing_facet_accel_data =
+  hour_accel_data %>%
+  pivot_longer(
+    cols = starts_with("hour_"),
+    names_to = "hour_of_day",
+    names_prefix = "hour_",
+    values_to = "activity_count"
+  ) %>%
+  ggplot(aes(x = hour_of_day, y = activity_count, group = day_id, color = day)) +
+  geom_line() +
+  facet_grid(. ~day) +
+  labs(
+    title = "Physicial Activity of a 63-year-old Male in a 24-Hour Day Over 5 Weeks",
+    x = "Minute of a 24-Hour Day",
+    y = "Density",
+    caption = "Data from the Accelerometer Dataset")
+```
 
 ### Description
