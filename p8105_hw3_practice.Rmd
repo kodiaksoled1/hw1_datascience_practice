@@ -1,4 +1,12 @@
 ---
+title: "new_hw3"
+author: "Kodiak Soled"
+date: "10/8/2019"
+output: github_document
+always_allow_html: yes
+---
+
+---
 title: "p8105_hw3_practice"
 author: "Kodiak Soled"
 date: "10/4/2019"
@@ -6,13 +14,14 @@ output: github_document
 always_allow_html: yes
 ---
 
-_Note to TAs: you may need to_ `install.packages(kableExtra)` _to run my code for problem #3._
+_Note to TAs: you may need to_ `install.packages(kableExtra)` _to run my code._
 
-###Setting up the document:
+### Loading in the settings for this R Markdown document:
 
 ```{r}
-library(tidyverse) #first load packages you want... 
 library(viridis)
+library(tidyverse)
+library(kableExtra)
 
 knitr::opts_chunk$set(
 	echo = TRUE,
@@ -38,7 +47,7 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 
 ## Instacart Dataset
 
-### We first need to read in and tidy the instacart dataset: 
+### We first need to read in and tidy the instacart dataset in order to explore : 
 
 ```{r}
 library(p8105.datasets)
@@ -53,33 +62,35 @@ cleaned_instacart =
 ```
 
 ### Description 
-* There are `r nrow(instacart)` observations and `r ncol(instacart)` variables in the Instacart dataset. 
-* Some key variables include the order and product identifier, the name of the product, the name and identifier of the department and aisle, and several variables that include information about the ordering of the product. 
-* For example, Organic Hass Avocados's product identifier is 47209. It is in the fresh fruit aisle (identifier: 24) which is part of the produce department (identifier: 4).
+
+* There are `r nrow(instacart)` observations and `r ncol(instacart)` variables for a totoal of `r nrow(instacart)*nrow(instacart)` in the Instacart dataset.
+* Some key variables in this dataset include the order and product identifier, the name of the product, the name and identifier of the department and aisle, and several variables that include information about the ordering of the product. 
+* An illustrative example in this dataset is that a organic hass avocados (product identifier #47209) was purchased by customer #112108 at 10 am on the 4th day of the week. This produce is located in the fresh fruit aisle (aisle identifier #24) which is part of the produce department (department identifier #4). Overall, there were `r sum(pull(cleaned_instacart %>% filter(product_name == "organic hass avocado") %>% count()))` organic hass avocados ordered. Another way of looking at this dataset is that customer #112108 placed an order at 10 am (order identifier #1) which had eight items in it (bulgarian yogurt, organic 4% milk fat whole milk cottage cheese, organic celery hearts, cucumber kirby, lightly smoked sardines in olive oil, bag of organic bananas, organic hass avocado, and organic whole string cheese) from the three departments of dairy eggs, produce, and canned goods.
 
 ## Answering Problem 1 Questions:
 
-### Determing the number of aisles and which aisles most items are ordered from: 
+### Determing the number of aisles in the Instacart dataaset and which aisles most items are ordered from: 
 
 ```{r}
 aisle = 
   cleaned_instacart %>% 
   group_by(aisle) %>%
   count() %>%
-  arrange(desc(n))
-
-aisle
+  arrange(desc(n)) %>%
+  as_tibble()
 ```
 
 * There are `r nrow(aisle)` aisles in this dataset. The most orders are from the fresh vegetables and fresh fruits aisles.
 
-## Here is a scatterplot that shows the number of items ordered in each aisle for aisles with more than 10,000 items ordered:
+### Making a scatterplot that shows the number of items ordered in each aisle for aisles with more than 10,000 items ordered:
 
 ```{r}
-aisle %>%
+cleaned_instacart %>%
+  count(aisle) %>%
   filter(n > 10000) %>%
-  ggplot(aes(x = n, y = aisle)) + 
-  geom_point() +
+  mutate(aisle = forcats::fct_reorder(aisle, n, .desc = TRUE)) %>%
+  ggplot(aes(x = aisle, y = n)) + coord_flip() +
+  geom_bar(stat = "identity") +
   labs(
     title = "Number of Items Ordered per Aisles (>10,000)",
     x = "Number of Items Ordered",
@@ -88,73 +99,62 @@ aisle %>%
     )
 ```
 
-## Here is a table with the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”: 
+### Making a table with the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”: 
 
 ```{r}
-library(kableExtra)
-baking_ingredients = 
+popularity_food = 
   cleaned_instacart %>%
-  filter(aisle == "baking ingredients") %>%
-  group_by(product_name) %>%
-  count() %>%
-  arrange(desc(n)) %>%
-  filter(n > 330) %>%
-  rename(number_times_item_ordered = n) %>%
-  knitr::kable(caption = "Three most Popular Items in the Baking Ingredients Aisle") %>%
+  select(aisle, product_name) %>%
+  filter(
+    aisle == "baking ingredients" |
+      aisle == "packaged vegetables fruits" |
+      aisle == "dog food care"
+    ) %>%
+  count(product_name, aisle) %>%
+  group_by(aisle) %>%
+  top_n(n = 3) %>%
+  mutate(
+    rank(desc(n))
+    ) %>%
+  rename(rank = 'rank(desc(n))') %>%
+  select(aisle, product_name, n, rank) %>%
+  arrange(aisle, desc(n)) %>%
+  knitr::kable(caption = "Three Most Popular Items among Aisles: Baking Ingredients, Packaged Vegetable Fruits, and Dog Food Car") %>%
   kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
 
-baking_ingredients
-
-dog_food_care = 
-  cleaned_instacart %>%
-  filter(aisle == "dog food care") %>%
-  group_by(product_name) %>%
-  count() %>%
-  arrange(desc(n)) %>%
-  filter(n > 25) %>%
-  rename(number_times_item_ordered = n) %>%
-  knitr::kable(caption = "Three most Popular Items in the Dog Food Care Aisle") %>%
-  kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
-
-dog_food_care
-
-packaged_vegetables_fruits = 
-  cleaned_instacart %>%
-  filter(aisle == "packaged vegetables fruits") %>%
-  group_by(product_name) %>%
-  count() %>%
-  arrange(desc(n)) %>%
-  filter(n > 4900) %>%
-  rename(number_times_item_ordered = n) %>%
-  knitr::kable(caption = "Three most Popular Items in the Packaged Vegetables Fruits Aisle") %>%
-  kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
-
-packaged_vegetables_fruits
+popularity_food
 ```
 
 ### Here is a table of the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week: 
 
 ```{r}
-pink_lady_apples = 
+apples_and_ice_cream = 
   cleaned_instacart %>%
-  filter(product_name == "pink lady apples")
-
-coffee_ice_cream = 
-  cleaned_instacart %>%
-  filter(product_name == "coffee ice cream")
-
-apples_and_ice_cream =
-  bind_rows(pink_lady_apples, coffee_ice_cream) %>%
-  select(product_name, order_hour_of_day, order_dow) %>%
-  group_by(product_name, order_dow) %>%
-  summarize(count = n()) %>%
-  arrange(order_dow) %>%
-  rename(day_of_week = order_dow) %>%
+  filter(
+    product_name == "pink lady apples" | 
+      product_name == "coffee ice cream"
+    ) %>%
+  mutate(
+    day_of_week = recode(order_dow,
+                         `1` = "monday", 
+                         `2` = "tuesday", 
+                         `3` = "wednesday", 
+                         `4` = "thursday", 
+                         `5` = "friday", 
+                         `6` = "saturday",
+                         `0` = "sunday"),
+    day_of_week = forcats::fct_relevel(day_of_week, c("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"))
+    ) %>%
+  select(day_of_week, product_name, order_hour_of_day) %>%
+  group_by(product_name, day_of_week) %>%
+  summarize(mean_hour = mean(order_hour_of_day)) %>%
+  arrange(day_of_week) %>%
   pivot_wider(
     names_from = "product_name",
-    values_from = "count"
+    values_from = "mean_hour"
   ) %>%
-   knitr::kable(caption = "Mean Hour of Day Pink Lady Apples and Coffee Ice Cream is Ordered Each Day of Week") %>% kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
+   knitr::kable(digit = 1, caption = "Mean Hour of Day Pink Lady Apples and Coffee Ice Cream is Ordered Each Day of Week") %>% 
+  kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
 
 apples_and_ice_cream
 ```
@@ -162,3 +162,329 @@ apples_and_ice_cream
 # Problem 2
 
 ## BRFSS Dataset
+
+```{r}
+library(p8105.datasets)
+data("brfss_smart2010")
+```
+
+### Cleaning data to have appropriate variable names, focus on the "Overall Health" topic, and organize responses from "poor" to "excellent"
+
+```{r}
+brfss = 
+  brfss_smart2010 %>%
+  janitor::clean_names() %>%
+  filter(topic == "Overall Health") %>%
+  mutate_all(tolower) %>%
+  mutate(
+    response = forcats::fct_relevel(response, c("poor", "fair", "good", "very good", "excellent"))
+    ) %>%
+  rename(
+    state = locationabbr, 
+    location = locationdesc
+    )
+```
+
+## Answering Problem 2 Questions:
+
+### Determining which states were observed at 7 or more locations in 2002 and in 2010:
+
+```{r}
+states_2002_locations = 
+  brfss %>%
+  filter(year == 2002) %>%
+  group_by(state) %>%
+  summarize(num_location = n_distinct(location)) %>%
+  filter(num_location >= 7) 
+
+states_2002_locations
+
+states_2010_locations =
+  brfss %>%
+  filter(year == 2010) %>%
+  group_by(state) %>%
+  summarize(location = n_distinct(location)) %>%
+  filter(location >= 7) 
+
+states_2010_locations
+```
+
+### Description
+* There were `r nrow(states_2002_locations)` states in 2002 that were observed at 7 or more locations. These states included: ct, ft, ma, nc, nj, pa.
+
+* There were `r nrow(states_2010_locations)` states in 2010 that were observed at 7 or more locations. These states included: ca, co, fl, ma, md, nc, ne, nj, ny, oh, pa, sc, tx, wa.
+
+### Making a dataset that is limited to `Excellent` responses, and contains, year, state, and a variable `mean_data_value` that averages the `data_value` across locations within a state:
+
+```{r}
+excellent_brfss =
+  brfss %>%
+  filter(response == "excellent") %>%
+  select(year, state, data_value) %>%
+  mutate(
+    data_value = as.numeric(data_value),
+    year = as.factor(year),
+    state = as.factor(state)
+  ) %>%
+  group_by(state, year) %>%
+  summarize(
+    mean_data_value = mean(data_value)
+    )
+
+excellent_brfss
+```
+
+### Making a “spaghetti” plot of the `mean_data_value` over time within a state:
+
+```{r}
+ggplot(excellent_brfss, aes(x = year, y = mean_data_value, group = state, color = state)) +
+  geom_line() + 
+  labs(
+    title = "Prevalence of Adult US Residents by State from 2002-2010",
+    x = "Year",
+    y = "Mean Prevalence", 
+    caption = "Data from the BRFSS Dataset")
+```
+
+### Making a two-panel plot showing, for the years 2006, and 2010, distribution of `data_value` for responses (“Poor” to “Excellent”) among locations in NY State: 
+
+```{r}
+brfss %>%
+  filter(state == "ny", 
+         year == 2010 |
+           year == 2006
+         ) %>%
+  select(year, location, data_value, response) %>%
+  mutate(
+    data_value = as.numeric(data_value),
+    year = as.factor(year),
+    location = as.factor(location)
+    ) %>%
+  ggplot(aes(x = response, y = data_value)) +
+  geom_boxplot() +
+  facet_grid(. ~year) + 
+  labs(
+    title = "Quality of General Health of Adult US Residents among locations in NY in 2006 and 2010",
+    x = "Quality of General Health",
+    y = "Prevalence",
+    caption = "Data from the BRFSS Dataset")
+```
+
+# Problem 3 
+
+## Accelerometer Data
+
+### Loading and tidying the Accelerometer dataset to include: 
+* all originally observed variables and values
+* useful variable names
+* a weekday vs weekend variable
+* reasonable variable classes
+
+```{r}
+accel_data = 
+  read_csv("./data/accel_data.csv") %>%
+  janitor::clean_names() %>%
+  mutate_at(vars(starts_with("activity")), funs(round(., 1))) %>%
+  mutate(
+    day = str_to_lower(day),
+    day_type = case_when(
+      day %in% c("monday", "tuesday", "wednesday", "thursday", "friday") ~ "weekday",
+      day %in% c("saturday", "sunday") ~ "weekend", 
+      TRUE ~ ""
+      ),
+    day = forcats::fct_relevel(day, c("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"))
+    ) %>%
+  select(week, day_id, day, day_type, everything()) %>%
+  arrange(week, day) %>%
+  pivot_longer(
+    cols = starts_with("activity_"),
+    names_to = "minute_of_day",
+    names_prefix = "activity_",
+    values_to = "activity_count"
+  )
+
+accel_data
+```
+
+### Description
+* There are `r nrow(accel_data)` observations and `r ncol(accel_data)` variables in the Acceleration dataset. The key variables include: the day, day id, week number, type of week day, and 1440 different activities. 
+
+### Aggregating data accross minutes to create a total activity variable for each day, and create a table showing these totals: 
+
+```{r}
+aggregate_accel_data =
+  accel_data %>%
+  group_by(week, day, day_type) %>%
+  summarize(total_activity = sum(activity_count)) %>%
+  arrange(week, day)
+
+aggregate_accel_data %>%
+    knitr::kable(caption = "Total Activity (mean minuutes) Count in a 24-Hour Period for Five Weeks") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
+```
+
+### Identifying trends in the aggregated dataset:
+
+### Making a single-panel plot that shows the 24-hour activity time courses for each day, using color to indicate day of the week:
+
+```{r}
+hours_accel_data =
+  accel_data %>%
+  ggplot(aes(x = minute_of_day, y = activity_count, color = day_id)) +
+  geom_line() +
+  labs(
+    title = "Physicial Activity of a 63-year-old Male in a 24-Hour Day Over 5 Weeks",
+    x = "Minute of a 24-Hour Day",
+    y = "Activity Counts",
+    caption = "Data from the Accelerometer Dataset")
+
+hours_accel_data
+
+week_totals_data =
+  accel_data %>%
+  group_by(week, day, minute_of_day, activity_count) %>%
+  summarize(
+    sum_activity_count = sum(activity_count)
+    ) %>%
+  ggplot(aes(x = minute_of_day, y = activity_count, color = day)) +
+  geom_point() +
+  labs(
+    title = "Physicial Activity of a 63-year-old Male over 5 Weeks",
+    x = "Minute of a 24-hour Day",
+    y = "Activity Count",
+    caption = "Data from the Accelerometer Dataset")
+
+week_totals_data
+```
+
+```{r}
+wide_accel_data = 
+  read_csv("./data/accel_data.csv") %>%
+  janitor::clean_names() %>%
+  mutate_at(vars(starts_with("activity")), funs(round(., 1))) %>%
+  mutate(
+    day = str_to_lower(day),
+    day_type = case_when(
+      day %in% c("monday", "tuesday", "wednesday", "thursday", "friday") ~ "weekday",
+      day %in% c("saturday", "sunday") ~ "weekend", 
+      TRUE ~ ""
+      ),
+    day = forcats::fct_relevel(day, c("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"))
+    ) %>%
+  select(week, day_id, day, day_type, everything()) %>%
+  arrange(week, day) 
+```
+
+```{r}
+hour_accel_data =
+  wide_accel_data %>%
+  mutate(
+    hour_0000 = select(., activity_1:activity_60) %>%
+      rowSums(na.rm = TRUE), 
+    hour_0100 = select(., activity_61:activity_120) %>%
+      rowSums(na.rm = TRUE),
+    hour_0200 = select(., activity_121:activity_180) %>%
+      rowSums(na.rm = TRUE),
+    hour_0300 = select(., activity_181:activity_240) %>%
+      rowSums(na.rm = TRUE),
+    hour_0400 = select(., activity_241:activity_300) %>%
+      rowSums(na.rm = TRUE),
+    hour_0500 = select(., activity_301:activity_360) %>%
+      rowSums(na.rm = TRUE),
+    hour_0600 = select(., activity_361:activity_420) %>%
+      rowSums(na.rm = TRUE),
+    hour_0700 = select(., activity_421:activity_480) %>%
+      rowSums(na.rm = TRUE),
+    hour_0800 = select(., activity_481:activity_540) %>%
+      rowSums(na.rm = TRUE),
+    hour_0900 = select(., activity_541:activity_600) %>%
+      rowSums(na.rm = TRUE),
+    hour_1000 = select(., activity_601:activity_660) %>%
+      rowSums(na.rm = TRUE),
+    hour_1100 = select(., activity_661:activity_720) %>%
+      rowSums(na.rm = TRUE),
+    hour_1200 = select(., activity_721:activity_780) %>%
+      rowSums(na.rm = TRUE),
+    hour_1300 = select(., activity_781:activity_840) %>%
+      rowSums(na.rm = TRUE),
+    hour_1400 = select(., activity_841:activity_900) %>%
+      rowSums(na.rm = TRUE),
+    hour_1500 = select(., activity_901:activity_880) %>%
+      rowSums(na.rm = TRUE),
+    hour_1600 = select(., activity_881:activity_960) %>%
+      rowSums(na.rm = TRUE),
+    hour_1700 = select(., activity_961:activity_1020) %>%
+      rowSums(na.rm = TRUE),
+    hour_1800 = select(., activity_1021:activity_1080) %>%
+      rowSums(na.rm = TRUE),
+    hour_1900 = select(., activity_1081:activity_1140) %>%
+      rowSums(na.rm = TRUE),
+    hour_2000 = select(., activity_1141:activity_1200) %>%
+      rowSums(na.rm = TRUE),
+    hour_2100 = select(., activity_1201:activity_1260) %>%
+      rowSums(na.rm = TRUE),
+    hour_2200 = select(., activity_1261:activity_1320) %>%
+      rowSums(na.rm = TRUE),
+    hour_2300 = select(., activity_1321:activity_1380) %>%
+      rowSums(na.rm = TRUE),
+    hour_2400 = select(., activity_1381:activity_1440) %>%
+      rowSums(na.rm = TRUE),
+  ) %>%
+  select(-c(5:1444))
+
+final_hour_accel_data =
+  hour_accel_data %>%
+  pivot_longer(
+    cols = starts_with("hour_"),
+    names_to = "hour_of_day",
+    names_prefix = "hour_",
+    values_to = "activity_count"
+  ) %>%
+  ggplot(aes(x = hour_of_day, y = activity_count, group = day_id, color = day)) +
+  geom_line() +
+  labs(
+    title = "Physicial Activity of a 63-year-old Male in a 24-Hour Day Over 5 Weeks",
+    x = "Minute of a 24-Hour Day",
+    y = "Activity Counts",
+    caption = "Data from the Accelerometer Dataset")
+
+final_hour_accel_data
+```
+
+```{r}
+playing_hour_accel_data =
+  hour_accel_data %>%
+  pivot_longer(
+    cols = starts_with("hour_"),
+    names_to = "hour_of_day",
+    names_prefix = "hour_",
+    values_to = "activity_count"
+  ) %>%
+  ggplot(aes(x = hour_of_day, fill = day)) +
+  geom_density(alpha = .4, adjust = .5) +
+  labs(
+    title = "Physicial Activity of a 63-year-old Male in a 24-Hour Day Over 5 Weeks",
+    x = "Minute of a 24-Hour Day",
+    y = "Density",
+    caption = "Data from the Accelerometer Dataset")
+
+playing_hour_accel_data =
+  hour_accel_data %>%
+  pivot_longer(
+    cols = starts_with("hour_"),
+    names_to = "hour_of_day",
+    names_prefix = "hour_",
+    values_to = "activity_count"
+  ) %>%
+  ggplot(aes(x = hour_of_day, y = activity_count)) +
+  geom_violin(aes(fill = hour_of_day), alpha = .5) +
+  labs(
+    title = "Physicial Activity of a 63-year-old Male in a 24-Hour Day Over 5 Weeks",
+    x = "Minute of a 24-Hour Day",
+    y = "Density",
+    caption = "Data from the Accelerometer Dataset")
+
+playing_hour_accel_data
+```
+
+### Description
