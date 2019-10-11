@@ -18,14 +18,14 @@ library(viridis)
 library(tidyverse)
 ```
 
-    ## ── Attaching packages ──────────────────────────────────────── tidyverse 1.2.1 ──
+    ## ── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──
 
     ## ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
     ## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
     ## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
     ## ✔ readr   1.3.1     ✔ forcats 0.4.0
 
-    ## ── Conflicts ─────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 
@@ -2144,11 +2144,11 @@ weekend
 
 </table>
 
-### Identifying trends in the aggregated dataset
+## Identifying trends in the aggregated dataset
 
-### We can create a few visuals of the aggregated dataset in order to identify trends that are occuring.
+### We can create a few visuals of the aggregated dataset in order to identify trends that are occuring:
 
-### We can create line plots to examine the average (`mean(activity_count` for an easier-to-read y-axis)) activity count for each of the five weeks by the day of the week as well as for each of day of the week across the five weeks:
+### 1\. We can create a line plot to examine the average (`mean(activity_count` for an easier-to-read y-axis)) activity count for each of the five weeks by the day of the week:
 
 ``` r
 accel_data %>%
@@ -2164,6 +2164,13 @@ accel_data %>%
 ```
 
 <img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-17-1.png" width="90%" />
+\* This plot allows us to see that this man’s activity increased across
+the week (from monday to sunday) for weeks 1, 2, and 3. However, for
+weeks 4 and 5, there is a sharp decline in activity that occurs over the
+weekend compared to the
+weekday.
+
+### 2\. We can create another line plot to examine the average (`mean(activity_count` for an easier-to-read y-axis)) activity count for each of day of the week across the five weeks:
 
 ``` r
 accel_data %>%
@@ -2178,18 +2185,16 @@ accel_data %>%
     caption = "Data from the Accelerometer Dataset")
 ```
 
-<img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-17-2.png" width="90%" />
-\* These plots allow us to see that this man’s activity increased across
-the week (from monday to sunday) for weeks 1, 2, and 3. However, for
-weeks 4 and 5, there is a sharp decline in activity that occurs over the
-weekend compared to the
-weekday.
+<img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-18-1.png" width="90%" />
+\* This second plot allows us to see that this man’s activity trended
+towards decresing from week 1 to week 5, particularly between week 3 and
+week 4 and when it came to the weekend (verses
+weekday).
 
-### Making a single-panel plot that shows the 24-hour activity time courses for each day, using color to indicate day of the week:
+### 3\. We can also try plotting the activity count across the 1400 minutes of the day, however, its very challenging to determine any trends due to the shear numbers of values:
 
 ``` r
-hours_accel_data =
-  accel_data %>%
+accel_data %>%
   ggplot(aes(x = minute_of_day, y = activity_count, color = day_id)) +
   geom_line() +
   labs(
@@ -2197,35 +2202,46 @@ hours_accel_data =
     x = "Minute of a 24-Hour Day",
     y = "Activity Counts",
     caption = "Data from the Accelerometer Dataset")
-
-hours_accel_data
 ```
 
-<img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-18-1.png" width="90%" />
+<img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-19-1.png" width="90%" />
+
+  - We can see from this last exploratory plot that there are two main
+    spikes throughout the day amongst the 35 days. Although we cannot
+    determine which minut of the day they are associated with, we can
+    guess that activity levels are highest around 5 am and 7 pm, and
+    that there was more activity during the first half of the 35 days
+    than the second
+half.
+
+### Lastly, we can making a single-panel plot that shows the 24-hour activity time courses for each day, using color to indicate day of the week by performing the following steps:
+
+  - Cut and paste the first code chuck of this dataset, with the
+    exception of the `pivot_longer` chunk in order to have my cleaned
+    and tidied dataset, but in a wide format (code up until `arrange`)
+    so I can change the dataset from minutes to hours
+  - Transform activity\_1 to activity:1440 from 1440 minutes to 24 hours
+    by `select`ing 60 minutes at a time (e.g.,
+    activity\_1:activity\_60), changing the variable name to its
+    corresponding hour of the day starting at 00:00/midnight, and
+    summing the activity counts of those 60 minute rows using `rowSUMs`
+    to get a summed activity count for each newly created hour variable.
+    This needs to be repeated 24 times for every hour of the day.
+  - Remove the old variables (activity\_1 through activity\_1440) by
+    de`select`ing them
+  - Transform the dataset to the longer format using `pivot_longer` to
+    have each hour of the day become a row with a corresponding activity
+    count
+  - Plot the 24 hours of the day on the x-axis, the summed activity
+    count of the y-axis, group the variables by “day\_id” to create 35
+    lines on the plot, and color the lines by the day of the week. Use
+    `geom_line` to create our desired plot and `labs` to create
+    approparite annotation of the chart title and captions:
+
+<!-- end list -->
 
 ``` r
-week_totals_data =
-  accel_data %>%
-  group_by(week, day, minute_of_day, activity_count) %>%
-  summarize(
-    sum_activity_count = sum(activity_count)
-    ) %>%
-  filter(day == "sunday") %>%
-  ggplot(aes(x = minute_of_day, y = activity_count, color = day)) +
-  geom_point() +
-  labs(
-    title = "Physicial Activity of a 63-year-old Male over 5 Weeks",
-    x = "Minute of a 24-hour Day",
-    y = "Activity Count",
-    caption = "Data from the Accelerometer Dataset")
-
-week_totals_data
-```
-
-<img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-18-2.png" width="90%" />
-
-``` r
-wide_accel_data = 
+hour_accel_data = 
   read_csv("./data/accel_data.csv") %>%
   janitor::clean_names() %>%
   mutate_at(vars(starts_with("activity")), funs(round(., 1))) %>%
@@ -2239,20 +2255,7 @@ wide_accel_data =
     day = forcats::fct_relevel(day, c("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"))
     ) %>%
   select(week, day_id, day, day_type, everything()) %>%
-  arrange(week, day) 
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_double(),
-    ##   day = col_character()
-    ## )
-
-    ## See spec(...) for full column specifications.
-
-``` r
-hour_accel_data =
-  wide_accel_data %>%
+  arrange(week, day) %>%
   mutate(
     hour_0000 = select(., activity_1:activity_60) %>%
       rowSums(na.rm = TRUE), 
@@ -2305,16 +2308,25 @@ hour_accel_data =
     hour_2400 = select(., activity_1381:activity_1440) %>%
       rowSums(na.rm = TRUE),
   ) %>%
-  select(-c(5:1444))
-
-final_hour_accel_data =
-  hour_accel_data %>%
+  select(-c(5:1444)) %>%
   pivot_longer(
     cols = starts_with("hour_"),
     names_to = "hour_of_day",
     names_prefix = "hour_",
     values_to = "activity_count"
-  ) %>%
+  )
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   .default = col_double(),
+    ##   day = col_character()
+    ## )
+
+    ## See spec(...) for full column specifications.
+
+``` r
+hour_accel_data %>%
   ggplot(aes(x = hour_of_day, y = activity_count, group = day_id, color = day)) +
   geom_line() +
   labs(
@@ -2322,99 +2334,41 @@ final_hour_accel_data =
     x = "Hours in a Day",
     y = "Activity Count",
     caption = "Data from the Accelerometer Dataset")
-
-final_hour_accel_data
 ```
 
 <img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-20-1.png" width="90%" />
 
-``` r
-playing_hour_accel_data =
-  hour_accel_data %>%
-  pivot_longer(
-    cols = starts_with("hour_"),
-    names_to = "hour_of_day",
-    names_prefix = "hour_",
-    values_to = "activity_count"
-  ) %>%
-  ggplot(aes(x = hour_of_day, fill = day)) +
-  geom_density(alpha = .4, adjust = .5) +
-  labs(
-    title = "Physicial Activity of a 63-year-old Male in a 24-Hour Day Over 5 Weeks",
-    x = "Hours in a Day",
-    y = "Activity Count",
-    caption = "Data from the Accelerometer Dataset")
+### Description
 
-playing_violin_accel_data =
-  hour_accel_data %>%
-  pivot_longer(
-    cols = starts_with("hour_"),
-    names_to = "hour_of_day",
-    names_prefix = "hour_",
-    values_to = "activity_count"
-  ) %>%
-  ggplot(aes(x = hour_of_day, y = activity_count)) +
-  geom_violin(aes(fill = hour_of_day), alpha = .5) +
-  labs(
-    title = "Physicial Activity of a 63-year-old Male in a 24-Hour Day Over 5 Weeks",
-    x = "Hours in a Day",
-    y = "Activity Count",
-    caption = "Data from the Accelerometer Dataset")
+  - Based on this graph, we can see that there are three times during
+    the day that activity count is highest: 11 am, 4 pm, and the highest
+    at 9 pm. Moreover, there is a dip in activity at around 3 pm and a
+    fairly absent level of activity from midnight to 4 am when it is
+    assumed this man is
+sleeiping.
 
-playing_hour_accel_data
-```
-
-<img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-21-1.png" width="90%" />
+### I wanted to get a better sense of what was happening to this man’s activity levels across each hour of the day on each day of the week so I plotting the hour of the day against the activity count (which I divided by 1000 to have a legible x-axis) and then used `facet_grid` to create a seven-panel plot of the seven days of the week:
 
 ``` r
-playing_facet_accel_data =
-  hour_accel_data %>%
-  pivot_longer(
-    cols = starts_with("hour_"),
-    names_to = "hour_of_day",
-    names_prefix = "hour_",
-    values_to = "activity_count"
-  ) %>%
-  ggplot(aes(x = hour_of_day, y = activity_count, color = day)) +
-  geom_point() +
-  geom_smooth(se = FALSE) +
+hour_accel_data %>%
+  mutate(reduced_activity = (activity_count / 1000)) %>%
+  ggplot(aes(x = hour_of_day, y = reduced_activity, fill = day)) +
+  geom_bar(stat = "identity") + coord_flip() +
   facet_grid(. ~day) +
   labs(
     title = "Physicial Activity of a 63-year-old Male in a 24-Hour Day Over 5 Weeks",
     x = "Hours in a Day",
     y = "Activity Count",
     caption = "Data from the Accelerometer Dataset")
-
-playing_facet_accel_data
 ```
 
-    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+<img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-21-1.png" width="90%" />
+\#\#\# This plot made it easier for me to see a similar pattern, but
+with less clutter, where the man is resting from midnight to 4 am and
+again at 3 pm and is very active at 11 am, 4 pm an 9
+pm.
 
-<img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-21-2.png" width="90%" />
-
-``` r
-days_accel_data =
-  hour_accel_data %>%
-  pivot_longer(
-    cols = starts_with("hour_"),
-    names_to = "hour_of_day",
-    names_prefix = "hour_",
-    values_to = "activity_count"
-  ) %>%
-  group_by(week, day) %>%
-  summarize(total_activity = mean(activity_count)) %>%
-  ggplot(aes(x = total_activity, y = day, color = day)) +
-  geom_line() +
-  geom_point() +
-  labs(
-    title = "Physicial Activity of a 63-year-old Male in a 24-Hour Day Over 5 Weeks",
-    x = "Day",
-    y = "Activity Count",
-    caption = "Data from the Accelerometer Dataset")
-days_accel_data
-```
-
-<img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-21-3.png" width="90%" />
+### I also thought it might be interesting to look at the distribution of activity for each day of the week which we can do using a ridge plot (note: the activity count is averaged in order to display the data in a meaningful way):
 
 ``` r
 library(ggridges)
@@ -2428,28 +2382,21 @@ library(ggridges)
     ##     scale_discrete_manual
 
 ``` r
-ridges_accel_data =
-  hour_accel_data %>%
-  pivot_longer(
-    cols = starts_with("hour_"),
-    names_to = "hour_of_day",
-    names_prefix = "hour_",
-    values_to = "activity_count"
-  ) %>%
-  group_by(week, day) %>%
+hour_accel_data %>%
+  mutate(week = as.numeric(week)) %>%
+  group_by(week, day, day_id) %>%
   summarize(total_activity = mean(activity_count)) %>%
   ggplot(aes(x = total_activity, y = day, fill = day)) +
   geom_density_ridges(scale = .85) +
   labs(
-    title = "Physicial Activity of a 63-year-old Male in a 24-Hour Day Over 5 Weeks",
-    x = "Total Activity",
+    title = "Physicial Activity of a 63-year-old Male \nBy Day of Week",
+    x = "Average Activity Count",
     y = "Day of Week",
     caption = "Data from the Accelerometer Dataset")
-ridges_accel_data
 ```
 
     ## Picking joint bandwidth of 2670
 
-<img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-21-4.png" width="90%" />
+<img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-22-1.png" width="90%" />
 
-### Description
+### We can see from this plot that the distribution generally falls between an average of 10,000 and 30,000 activities among the seven days of the week for the five weeks data is captured.
