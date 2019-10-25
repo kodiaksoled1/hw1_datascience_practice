@@ -181,9 +181,12 @@ cleaned_instacart %>%
 ```
 
 <img src="p8105_hw3_practice_files/figure-gfm/unnamed-chunk-5-1.png" width="90%" />
-\#\#\# Description \* It is also evident from this bar plot that the
-“fresh vegetables” and “fresh fruits” aisles are clearly the most
-popular aisles to order
+
+### Description
+
+  - It is also evident from this bar plot that the “fresh vegetables”
+    and “fresh fruits” aisles are clearly the most popular aisles to
+    order
 from.
 
 ### To make a table with the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”, we need to perform several steps. We need to:
@@ -2774,7 +2777,7 @@ hour_accel_data %>%
   ggplot(aes(x = total_activity, y = day, fill = day)) +
   geom_density_ridges(scale = .85) +
   labs(
-    title = "Physicial Activity of a 63-year-old Male \nBy Day of Week",
+    title = "Average Physicial Activity of a 63-year-old Male By Day of Week",
     x = "Average Activity Count",
     y = "Day of Week",
     caption = "Data from the Accelerometer Dataset")

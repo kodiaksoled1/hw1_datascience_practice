@@ -97,6 +97,7 @@ cleaned_instacart %>%
     caption = "Data from the Instacart Dataset"
     )
 ```
+
 ### Description
 * It is also evident from this bar plot that the "fresh vegetables" and "fresh fruits" aisles are clearly the most popular aisles to order from. 
 
@@ -136,8 +137,7 @@ cleaned_instacart %>%
 * Produce our reader-friendly table using `knitr::kable`:
 
 ```{r}
-apples_and_ice_cream = 
-  cleaned_instacart %>%
+cleaned_instacart %>%
   filter(
     product_name == "pink lady apples" | 
       product_name == "coffee ice cream"
@@ -162,8 +162,6 @@ apples_and_ice_cream =
   ) %>%
    knitr::kable(digit = 1, caption = "Mean Hour of Day Pink Lady Apples and Coffee Ice Cream is Ordered Each Day of Week") %>% 
   kable_styling(bootstrap_options = c("striped", "condensed", font_size = 12))
-
-apples_and_ice_cream
 ```
 
 * We can see from this table that both coffee ice cream and pink lady apples orders are on average placed between 11 am and 4 pm. Cofee ice cream also tends to be ordered later in the da than pink lady apples.
@@ -546,7 +544,7 @@ hour_accel_data %>%
   ggplot(aes(x = total_activity, y = day, fill = day)) +
   geom_density_ridges(scale = .85) +
   labs(
-    title = "Physicial Activity of a 63-year-old Male \nBy Day of Week",
+    title = "Average Physicial Activity of a 63-year-old Male By Day of Week",
     x = "Average Activity Count",
     y = "Day of Week",
     caption = "Data from the Accelerometer Dataset")

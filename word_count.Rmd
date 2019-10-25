@@ -1,0 +1,11 @@
+---
+title: "wordcount"
+author: "Kodiak Soled"
+date: "10/23/2019"
+output: html_document
+---
+
+```{r}
+devtools::install_github("benmarwick/wordcountaddin", type = "source", dependencies = TRUE)
+
+```
