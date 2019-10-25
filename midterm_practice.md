@@ -116,7 +116,7 @@ Word count
 
 <td style="text-align:left;">
 
-498
+500
 
 </td>
 
@@ -138,13 +138,13 @@ Character count
 
 <td style="text-align:left;">
 
-2954
+2994
 
 </td>
 
 <td style="text-align:left;">
 
-2953
+2993
 
 </td>
 
@@ -160,7 +160,7 @@ Sentence count
 
 <td style="text-align:left;">
 
-43
+42
 
 </td>
 
@@ -282,159 +282,306 @@ mtp_data =
 ### Issues:
 
   - Included a 17
-    y/o
-    <table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
-    <caption>
-    Participant 7’s Inclusion of 17-year-old Participant
-    </caption>
-    <thead>
-    <tr>
-    <th style="text-align:left;">
-    sex
-    </th>
-    <th style="text-align:right;">
-    age
-    </th>
-    <th style="text-align:left;">
-    age\_category
-    </th>
-    <th style="text-align:right;">
-    eop\_size\_mm
-    </th>
-    <th style="text-align:left;">
-    eop\_category
-    </th>
-    <th style="text-align:left;">
-    eop\_visibility\_classification
-    </th>
-    <th style="text-align:right;">
-    eop\_shape
-    </th>
-    <th style="text-align:right;">
-    fhp\_size\_mm
-    </th>
-    <th style="text-align:left;">
-    fhp\_category
-    </th>
-    <th style="text-align:left;">
-    eeop
-    </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-    <td style="text-align:left;">
-    female
-    </td>
-    <td style="text-align:right;">
-    17
-    </td>
-    <td style="text-align:left;">
-    41-50
-    </td>
-    <td style="text-align:right;">
-    6.4
-    </td>
-    <td style="text-align:left;">
-    5-10mm
-    </td>
-    <td style="text-align:left;">
-    eop\_\>5mm
-    </td>
-    <td style="text-align:right;">
-    1
-    </td>
-    <td style="text-align:right;">
-    30.6
-    </td>
-    <td style="text-align:left;">
-    30-40mm
-    </td>
-    <td style="text-align:left;">
-    no
-    </td>
-    </tr>
-    </tbody>
-    </table>
+y/o
+
+<table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
+
+<caption>
+
+Participant 7’s Inclusion of 17-year-old Participant
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+sex
+
+</th>
+
+<th style="text-align:right;">
+
+age
+
+</th>
+
+<th style="text-align:left;">
+
+age\_category
+
+</th>
+
+<th style="text-align:right;">
+
+eop\_size\_mm
+
+</th>
+
+<th style="text-align:left;">
+
+eop\_category
+
+</th>
+
+<th style="text-align:left;">
+
+eop\_visibility\_classification
+
+</th>
+
+<th style="text-align:right;">
+
+eop\_shape
+
+</th>
+
+<th style="text-align:right;">
+
+fhp\_size\_mm
+
+</th>
+
+<th style="text-align:left;">
+
+fhp\_category
+
+</th>
+
+<th style="text-align:left;">
+
+eeop
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+female
+
+</td>
+
+<td style="text-align:right;">
+
+17
+
+</td>
+
+<td style="text-align:left;">
+
+41-50
+
+</td>
+
+<td style="text-align:right;">
+
+6.4
+
+</td>
+
+<td style="text-align:left;">
+
+5-10mm
+
+</td>
+
+<td style="text-align:left;">
+
+eop\_\>5mm
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+30.6
+
+</td>
+
+<td style="text-align:left;">
+
+30-40mm
+
+</td>
+
+<td style="text-align:left;">
+
+no
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
   - Several “eop\_category” and “eop\_visibility\_classification” data
     were incorretly implemented (e.g., participant \#3’s
     “eop\_size”=‘0’, but “eop\_visibility\_classification”=‘\>0’
     and \#126’s “eop\_size\_mm”=‘2.11’ but
-    “eop\_size”=‘\>5’)
-    <table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
-    <caption>
-    Participant 3’s EOP Visibility
+“eop\_size”=‘\>5’)
+
+<table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
+
+<caption>
+
+Participant 3’s EOP Visibility
 Misclassification
-    </caption>
-    <thead>
-    <tr>
-    <th style="text-align:left;">
-    sex
-    </th>
-    <th style="text-align:right;">
-    age
-    </th>
-    <th style="text-align:left;">
-    age\_category
-    </th>
-    <th style="text-align:right;">
-    eop\_size\_mm
-    </th>
-    <th style="text-align:left;">
-    eop\_category
-    </th>
-    <th style="text-align:left;">
-    eop\_visibility\_classification
-    </th>
-    <th style="text-align:right;">
-    eop\_shape
-    </th>
-    <th style="text-align:right;">
-    fhp\_size\_mm
-    </th>
-    <th style="text-align:left;">
-    fhp\_category
-    </th>
-    <th style="text-align:left;">
-    eeop
-    </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-    <td style="text-align:left;">
-    female
-    </td>
-    <td style="text-align:right;">
-    22
-    </td>
-    <td style="text-align:left;">
-    18-30
-    </td>
-    <td style="text-align:right;">
-    0
-    </td>
-    <td style="text-align:left;">
-    0-5mm
-    </td>
-    <td style="text-align:left;">
-    0\<*eop*\<=5mm
-    </td>
-    <td style="text-align:right;">
-    NA
-    </td>
-    <td style="text-align:right;">
-    28.1
-    </td>
-    <td style="text-align:left;">
-    20-30mm
-    </td>
-    <td style="text-align:left;">
-    no
-    </td>
-    </tr>
-    </tbody>
-    </table>
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+sex
+
+</th>
+
+<th style="text-align:right;">
+
+age
+
+</th>
+
+<th style="text-align:left;">
+
+age\_category
+
+</th>
+
+<th style="text-align:right;">
+
+eop\_size\_mm
+
+</th>
+
+<th style="text-align:left;">
+
+eop\_category
+
+</th>
+
+<th style="text-align:left;">
+
+eop\_visibility\_classification
+
+</th>
+
+<th style="text-align:right;">
+
+eop\_shape
+
+</th>
+
+<th style="text-align:right;">
+
+fhp\_size\_mm
+
+</th>
+
+<th style="text-align:left;">
+
+fhp\_category
+
+</th>
+
+<th style="text-align:left;">
+
+eeop
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+female
+
+</td>
+
+<td style="text-align:right;">
+
+22
+
+</td>
+
+<td style="text-align:left;">
+
+18-30
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:left;">
+
+0-5mm
+
+</td>
+
+<td style="text-align:left;">
+
+0\<*eop*\<=5mm
+
+</td>
+
+<td style="text-align:right;">
+
+NA
+
+</td>
+
+<td style="text-align:right;">
+
+28.1
+
+</td>
+
+<td style="text-align:left;">
+
+20-30mm
+
+</td>
+
+<td style="text-align:left;">
+
+no
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 <table class="table table-striped table-condensed" style="margin-left: auto; margin-right: auto;">
 
@@ -796,7 +943,7 @@ male
 <img src="midterm_practice_files/figure-gfm/recreating the authors figure 3-1.png" width="90%" />
 
 ``` r
-figure_3 = 
+improved_figure_3 = 
   mtp_data %>%
   ggplot(aes(x = age_category, y = fhp_size_mm, color = sex)) + 
   geom_boxplot() +
@@ -809,13 +956,14 @@ figure_3 =
     breaks = c(0, 20, 40, 60, 80),
     labels = c("0", "20", "40", "60", "80"))
 
-figure_3
+improved_figure_3
 ```
 
 <img src="midterm_practice_files/figure-gfm/improved figure 3-1.png" width="90%" />
 
 ``` r
- mtp_data %>%
+improved_figure_3_another =
+  mtp_data %>%
   ggplot(aes(x = age, y = fhp_size_mm, color = sex)) + 
   geom_point() +  
   geom_smooth(se = FALSE) +
@@ -827,18 +975,20 @@ figure_3
   scale_y_continuous(
     breaks = c(0, 20, 40, 60, 80),
     labels = c("0", "20", "40", "60", "80"))
+
+improved_figure_3_another
 ```
 
     ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 
 <img src="midterm_practice_files/figure-gfm/unnamed-chunk-8-1.png" width="90%" />
 
-### These show fhp\_size doesn’t increase until age 55 and is only slightly larger in males.
+### These figures show fhp\_size doesn’t really increase until age 55 and is only slightly larger in males.
 
 <img src="midterm_practice_files/figure-gfm/recreating the authors figure 4-1.png" width="90%" />
 
 ``` r
-figure_4 = 
+improved_figure_4 = 
   mtp_data %>%
   group_by(age_category, sex, eeop) %>%
   count() %>%
@@ -862,17 +1012,17 @@ figure_4 =
     breaks = c(0, 10, 20, 30, 40, 50, 60, 70),
     labels = c("0", "10%", "20%", "30%", "40%", "50%", "60%", "70%"))
 
-figure_4
+improved_figure_4
 ```
 
 <img src="midterm_practice_files/figure-gfm/improved figure 4-1.png" width="90%" />
 
-### The eeop rate is higher in every age group for males, and is highest in 18-30 y/o’s.
+### The eeop rate is higher in every age group for males, and is highest among 18-30 y/o’s.
 
 ## Two-Paneled Figure
 
 ``` r
-figure_3 + figure_4
+improved_figure_3 + improved_figure_4
 ```
 
 <img src="midterm_practice_files/figure-gfm/unnamed-chunk-9-1.png" width="90%" />
@@ -899,7 +1049,7 @@ fhp_eop_association
 
 <img src="midterm_practice_files/figure-gfm/unnamed-chunk-10-1.png" width="90%" />
 
-### There’s a positive association between FHP and EOP in each age group by sex except 31-40 y/o’s and females aged 41-60. The association is strongest in males and 61+’s.
+### There’s a positive association between FHP and EOP in each age group for males, but only in the 18-30 and 61+ for females. The association is strongest in those 61+.
 
 ### “eop\_size” = ‘0’ was removed as these are missing values. Including ’0’s would falsely make all associations positive:
 
@@ -922,7 +1072,8 @@ mtp_data %>%
 
 <caption>
 
-Age Distribution of Sample
+Age Distribution of
+Sample
 
 </caption>
 
@@ -1032,9 +1183,7 @@ n
 
 </table>
 
-### Author’s report n=1200. We have n=1221.
-
-### Author’s reported age group sizes different than our results.
+### Total n (1221 vs. 1200) and age group sizes were reported differently than our results (e.g., 18-30: 303 vs 300).
 
 ## FHP
 
@@ -1196,7 +1345,7 @@ sd\_fhp
 
 </table>
 
-### The reported mean FHP by gender and overall was slightly off from our results.
+### The reported mean FHP by gender and overall was slightly different than our results.
 
 ## EEOP Prevalence
 
@@ -1291,11 +1440,11 @@ rate
 
 </table>
 
-### Definition of EEOP: “bony outgrowths \>10mm.”
+### The definition of EEOP is “bony outgrowths \>10mm” but “eop\_size” and “eop\_visibility\_classification” were not categorized this way.
 
-### “eop\_size” and “eop\_visibility\_classification” were not categorized this way. A new variable “eeop” was created during data cleaning to meet this definition.
+### A new variable “eeop” was created during data cleaning to meet this definition.
 
-### The 32.3% prevalence is close from the reported 33%.
+### The 32.3% prevalence is close to the reported 33%.
 
 ## FHP Trends
 
@@ -1333,9 +1482,9 @@ mtp_data %>%
 
 <img src="midterm_practice_files/figure-gfm/unnamed-chunk-15-1.png" width="90%" />
 
-### Again, the numbers are slightly off (32.5% found vs 34.5% reported).
+### Again, the numbers are slightly different (32.5% vs 34.5% reported).
 
-### They claim is consistent with our data (FHP\>40 mm was observed frequently in those 61+)
+### Their claim is consistent with our data (FHP\>40 mm was observed frequently in those 61+)
 
 ### Broadly speaking, there’s an increase in FHP for those 61+.
 
